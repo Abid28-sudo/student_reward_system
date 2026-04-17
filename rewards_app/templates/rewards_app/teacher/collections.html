@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Student Collections" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2>
+                <i class="fas fa-gift"></i> {% trans "Student Collections" %}
+            </h2>
+            <p class="text-muted">{% trans "View all products purchased by students" %}</p>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" class="d-flex gap-2">
+                <select name="student" class="form-select" onchange="this.form.submit()">
+                    <option value="">{% trans "All Students" %}</option>
+                    {% for student in students %}
+                        <option value="{{ student.id }}" {% if selected_student|stringformat:"s" == student.id|stringformat:"s" %}selected{% endif %}>
+                            {{ student.user.get_full_name }} ({{ student.collection_count }} {% trans "items" %})
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <!-- Collections Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">{% trans "Purchased Items" %}</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if orders %}
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Student Name" %}</th>
+                                    <th>{% trans "Product" %}</th>
+                                    <th>{% trans "Quantity" %}</th>
+                                    <th>{% trans "Coins Spent" %}</th>
+                                    <th>{% trans "Purchase Date" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ order.student.user.get_full_name }}</strong>
+                                        <br>
+                                        <small class="text-muted">@{{ order.student.user.username }}</small>
+                                    </td>
+                                    <td>
+                                        {% if order.product %}
+                                            <span class="badge bg-info">{{ order.product.name }}</span>
+                                        {% else %}
+                                            <em class="text-muted">{% trans "Product deleted" %}</em>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">x{{ order.quantity }}</span>
+                                    </td>
+                                    <td>
+                                        <strong class="text-warning">
+                                            <i class="fas fa-coins"></i> {{ order.coins_spent }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <small>{{ order.created_at|date:"M d, Y H:i" }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-info m-3">
+                            <i class="fas fa-info-circle"></i>
+                            {% trans "No collections found." %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if selected_student %}&student={{ selected_student }}{% endif %}">
+                                {% trans "First" %}
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_student %}&student={{ selected_student }}{% endif %}">
+                                {% trans "Previous" %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_student %}&student={{ selected_student }}{% endif %}">
+                                {% trans "Next" %}
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if selected_student %}&student={{ selected_student }}{% endif %}">
+                                {% trans "Last" %}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Statistics Card -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Total Items Purchased" %}</h5>
+                    <h2 class="text-warning"><i class="fas fa-gift"></i> {{ page_obj.paginator.count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Unique Students" %}</h5>
+                    <h2 class="text-info"><i class="fas fa-users"></i> {{ students|length }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Total Coins Spent" %}</h5>
+                    <h2 class="text-success">
+                        <i class="fas fa-coins"></i> 
+                        {% if orders %}
+                            {% with total=0 %}
+                                {% for order in orders %}
+                                    {% comment %} This is a workaround for summing in template {% endcomment %}
+                                {% endfor %}
+                            {% endwith %}
+                        {% endif %}
+                        -
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,327 @@
+# Arabic (العربية) translations for Student Reward System
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Student Reward System 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-09 22:00:00+0000\n"
+"PO-Revision-Date: 2026-04-09 22:00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%10>=3 && n%10<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+
+# Navigation and UI
+msgid "Student Reward System"
+msgstr "نظام مكافآت الطلاب"
+
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "Manage"
+msgstr "إدارة"
+
+msgid "Students"
+msgstr "الطلاب"
+
+msgid "Reward Student"
+msgstr "مكافآة الطالب"
+
+msgid "Mark Attendance"
+msgstr "تسجيل الحضور"
+
+msgid "Store"
+msgstr "المتجر"
+
+msgid "Ranking"
+msgstr "الترتيب"
+
+msgid "Language"
+msgstr "اللغة"
+
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+msgid "Register"
+msgstr "إنشاء حساب"
+
+msgid "About"
+msgstr "حول"
+
+msgid "Student Reward System - A gamification platform for educational motivation."
+msgstr "نظام مكافآت الطلاب - منصة الألعاب لتحفيز التعليم"
+
+msgid "Quick Links"
+msgstr "روابط سريعة"
+
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "Documentation"
+msgstr "التوثيق"
+
+# Authentication messages
+msgid "Registration successful! Please log in."
+msgstr "تم التسجيل بنجاح! يرجى تسجيل الدخول."
+
+msgid "Welcome back, Teacher!"
+msgstr "أهلاً وسهلاً بك يا معلم!"
+
+msgid "Welcome back, Student!"
+msgstr "أهلاً وسهلاً بك يا طالب!"
+
+msgid "You have been logged out successfully."
+msgstr "تم تسجيل الخروج بنجاح."
+
+msgid "You do not have permission to access this page."
+msgstr "ليس لديك إذن للوصول إلى هذه الصفحة."
+
+# Student view messages
+msgid "You do not have enough coins. You need %(needed)d coins."
+msgstr "ليس لديك عملات كافية. أنت تحتاج إلى %(needed)d عملة."
+
+msgid "Invalid quantity."
+msgstr "كمية غير صحيحة."
+
+msgid "This product is not available."
+msgstr "هذا المنتج غير متاح."
+
+msgid "Purchase successful! %(product)s x%(quantity)d added to your collection."
+msgstr "تم الشراء بنجاح! %(product)s x%(quantity)d تمت إضافته إلى مجموعتك."
+
+msgid "Purchased: %(product)s x%(quantity)d"
+msgstr "تم شراء: %(product)s x%(quantity)d"
+
+# Teacher messages
+msgid "Student added successfully!"
+msgstr "تمت إضافة الطالب بنجاح!"
+
+msgid "Student deactivated successfully."
+msgstr "تم إلغاء تنشيط الطالب بنجاح."
+
+msgid "Rewarded %(student)s with %(coins)d coins!"
+msgstr "تم مكافأة %(student)s بـ %(coins)d عملة!"
+
+msgid "Attendance marked successfully!"
+msgstr "تم تسجيل الحضور بنجاح!"
+
+msgid "Product added successfully!"
+msgstr "تمت إضافة المنتج بنجاح!"
+
+msgid "Product updated successfully!"
+msgstr "تم تحديث المنتج بنجاح!"
+
+msgid "Product deleted successfully!"
+msgstr "تم حذف المنتج بنجاح!"
+
+# Profile page
+msgid "User Profile"
+msgstr "الملف الشخصي للمستخدم"
+
+msgid "Account Profile"
+msgstr "ملف الحساب"
+
+msgid "Basic Information"
+msgstr "معلومات أساسية"
+
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgid "Full Name"
+msgstr "الاسم الكامل"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Role"
+msgstr "الدور"
+
+msgid "Teacher"
+msgstr "معلم"
+
+msgid "Student"
+msgstr "طالب"
+
+msgid "Account Details"
+msgstr "تفاصيل الحساب"
+
+msgid "Status"
+msgstr "الحالة"
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "Inactive"
+msgstr "غير نشط"
+
+msgid "Member Since"
+msgstr "عضو منذ"
+
+msgid "Last Login"
+msgstr "آخر تسجيل دخول"
+
+msgid "Student Statistics"
+msgstr "إحصائيات الطالب"
+
+msgid "Total Coins"
+msgstr "إجمالي العملات"
+
+msgid "Rank"
+msgstr "الترتيب"
+
+msgid "Attendance"
+msgstr "الحضور"
+
+msgid "Quick Stats"
+msgstr "إحصائيات سريعة"
+
+msgid "Total Transactions"
+msgstr "إجمالي المعاملات"
+
+msgid "Total Purchases"
+msgstr "إجمالي المشتريات"
+
+msgid "Member Level"
+msgstr "مستوى العضوية"
+
+msgid "Gold"
+msgstr "ذهبي"
+
+msgid "Silver"
+msgstr "فضي"
+
+msgid "Bronze"
+msgstr "برونزي"
+
+msgid "Back to Home"
+msgstr "العودة للرئيسية"
+
+# Common UI elements
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Cancel"
+msgstr "الغاء"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Edit"
+msgstr "تعديل"
+
+msgid "Add"
+msgstr "إضافة"
+
+msgid "Submit"
+msgstr "إرسال"
+
+msgid "Not provided"
+msgstr "لم يتم توفيره"
+
+msgid "Never"
+msgstr "أبداً"
+
+# Collections feature
+msgid "My Collections"
+msgstr "مجموعتي"
+
+msgid "View All Collections"
+msgstr "عرض جميع المجموعات"
+
+msgid "You haven't purchased anything yet! Visit the store to get started."
+msgstr "لم تقم بشراء أي شيء حتى الآن! قم بزيارة المتجر للبدء."
+
+msgid "Browse Store"
+msgstr "استعرض المتجر"
+
+msgid "Student Collections"
+msgstr "مجموعات الطالب"
+
+msgid "View all products purchased by students"
+msgstr "عرض جميع المنتجات التي اشتراها الطلاب"
+
+msgid "All Students"
+msgstr "جميع الطلاب"
+
+msgid "items"
+msgstr "عناصر"
+
+msgid "Purchased Items"
+msgstr "العناصر المشتراة"
+
+msgid "Student Name"
+msgstr "اسم الطالب"
+
+msgid "Product"
+msgstr "المنتج"
+
+msgid "Quantity"
+msgstr "الكمية"
+
+msgid "Coins Spent"
+msgstr "العملات المنفقة"
+
+msgid "Purchase Date"
+msgstr "تاريخ الشراء"
+
+msgid "Product deleted"
+msgstr "تم حذف المنتج"
+
+msgid "No collections found."
+msgstr "لم يتم العثور على مجموعات."
+
+msgid "First"
+msgstr "الأول"
+
+msgid "Previous"
+msgstr "السابق"
+
+msgid "Page"
+msgstr "صفحة"
+
+msgid "of"
+msgstr "من"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "Last"
+msgstr "الأخير"
+
+msgid "Total Items Purchased"
+msgstr "إجمالي العناصر المشتراة"
+
+msgid "Unique Students"
+msgstr "الطلاب الفريدون"
+
+msgid "Total Coins Spent"
+msgstr "إجمالي العملات المنفقة"
+
+msgid "Change Theme"
+msgstr "تغيير المظهر"
+
+msgid "Standard"
+msgstr "معياري"
+
+msgid "Warm Brown"
+msgstr "بني دافئ"
+
+msgid "Dark Blue"
+msgstr "أزرق غامق"
+
+msgid "Collections"
+msgstr "المجموعات"

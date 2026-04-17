@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Student Dashboard" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                <i class="fas fa-user-graduate"></i> {% trans "Student Dashboard" %}
+            </h1>
+            <p class="text-muted">{% trans "Hello" %}, {{ request.user.get_full_name }}! 👋</p>
+        </div>
+    </div>
+
+    <!-- Main Statistics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="dashboard-stat-card coins">
+                <h4><i class="fas fa-coins"></i> {{ student.total_coins }}</h4>
+                <p>{% trans "Total Coins" %}</p>
+                <small class="text-muted">{% trans "Balance available for shopping" %}</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-stat-card rank">
+                <h4><i class="fas fa-medal"></i> #{{ student.rank }}</h4>
+                <p>{% trans "Your Rank" %}</p>
+                <small class="text-muted">{% trans "Global leaderboard position" %}</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-stat-card attendance">
+                <h4><i class="fas fa-calendar-check"></i> {{ student.attendance_count }}</h4>
+                <p>{% trans "Days Present" %}</p>
+                <small class="text-muted">{% trans "Your attendance record" %}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Explore" %}</h5>
+                    <div class="btn-group flex-wrap" role="group">
+                        <a href="{% url 'rewards_app:student_ranking' %}" class="btn btn-primary">
+                            <i class="fas fa-chart-line"></i> {% trans "Leaderboard" %}
+                        </a>
+                        <a href="{% url 'rewards_app:browse_store' %}" class="btn btn-success">
+                            <i class="fas fa-shopping-cart"></i> {% trans "Shop" %}
+                        </a>
+                        <a href="{% url 'rewards_app:view_attendance' %}" class="btn btn-info">
+                            <i class="fas fa-calendar"></i> {% trans "Attendance" %}
+                        </a>
+                        <a href="{% url 'rewards_app:transaction_history' %}" class="btn btn-warning">
+                            <i class="fas fa-history"></i> {% trans "History" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row g-4">
+        <!-- Recent Transactions -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-history"></i> {% trans "Recent Transactions" %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_transactions %}
+                        <div class="list-group list-group-flush">
+                            {% for transaction in recent_transactions %}
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">
+                                        {% if transaction.transaction_type == 'reward' %}
+                                            <span class="badge bg-success">+</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">-</span>
+                                        {% endif %}
+                                        {{ transaction.coins }} {% trans "coins" %}
+                                    </h6>
+                                    <small>{{ transaction.created_at|date:"SHORT_DATE_FORMAT" }}</small>
+                                </div>
+                                <p class="mb-1">{{ transaction.reason }}</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'rewards_app:transaction_history' %}" class="btn btn-sm btn-outline-primary">
+                                {% trans "View All" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">
+                            {% trans "No transactions yet" %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Attendance -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-calendar-check"></i> {% trans "Recent Attendance" %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_attendances %}
+                        <div class="list-group list-group-flush">
+                            {% for attendance in recent_attendances %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <h6 class="mb-1">{{ attendance.date }}</h6>
+                                    {% if attendance.status == 'present' %}
+                                        <span class="badge bg-success">{% trans "Present" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">{% trans "Absent" %}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'rewards_app:view_attendance' %}" class="btn btn-sm btn-outline-success">
+                                {% trans "View All" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">
+                            {% trans "No attendance records yet" %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collections Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="mb-0">
+                        <i class="fas fa-gift"></i> {% trans "My Collections" %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_collections %}
+                        <div class="row g-3">
+                            {% for order in recent_collections %}
+                                {% if order.product %}
+                                <div class="col-md-2 col-sm-3 col-6">
+                                    <div class="card h-100 text-center" style="cursor: pointer;">
+                                        <div class="card-body p-2">
+                                            <div style="min-height: 60px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+                                                <i class="fas fa-box" style="font-size: 2rem; color: #999;"></i>
+                                            </div>
+                                            <h6 class="card-title" style="font-size: 0.85rem; word-wrap: break-word;">{{ order.product.name|truncatewords:3 }}</h6>
+                                            <small class="text-muted d-block">x{{ order.quantity }}</small>
+                                            <small class="text-warning">{{ order.coins_spent }} {% trans "coins" %}</small>
+                                            <div class="text-muted" style="font-size: 0.75rem; margin-top: 0.5rem;">
+                                                {{ order.created_at|date:"SHORT_DATE_FORMAT" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'rewards_app:student_purchases' %}" class="btn btn-sm btn-outline-warning">
+                                {% trans "View All Collections" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">
+                            <i class="fas fa-shopping-bag" style="font-size: 2rem;"></i><br><br>
+                            {% trans "You haven't purchased anything yet! Visit the store to get started." %}
+                        </p>
+                        <div class="text-center">
+                            <a href="{% url 'rewards_app:browse_store' %}" class="btn btn-sm btn-outline-success">
+                                {% trans "Browse Store" %}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivational Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-lightbulb"></i> {% trans "Tip" %}
+                </h5>
+                <p>
+                    {% trans "Keep up the great work! Complete tasks, maintain attendance, and earn coins to unlock rewards in the store." %}
+                </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

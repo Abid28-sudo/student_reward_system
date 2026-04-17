@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Home" %} - {% trans "Student Reward System" %}{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-gradient py-5 text-white">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">
+            <i class="fas fa-star"></i> {% trans "Student Reward & Ranking System" %}
+        </h1>
+        <p class="lead mb-4">{% trans "Motivate and engage students through gamification, achievements, and friendly competition." %}</p>
+        
+        {% if not user.is_authenticated %}
+            <a href="{% url 'rewards_app:login' %}" class="btn btn-light btn-lg me-2">
+                <i class="fas fa-sign-in-alt"></i> {% trans "Login" %}
+            </a>
+            <a href="{% url 'rewards_app:register' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-user-plus"></i> {% trans "Register" %}
+            </a>
+        {% else %}
+            {% if user.role == 'teacher' %}
+                <a href="{% url 'rewards_app:teacher_dashboard' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-home"></i> {% trans "Go to Dashboard" %}
+                </a>
+            {% else %}
+                <a href="{% url 'rewards_app:student_dashboard' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-home"></i> {% trans "Go to Dashboard" %}
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">{% trans "Key Features" %}</h2>
+        
+        <div class="row g-4">
+            <!-- For Teachers -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-primary">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-chalkboard-user"></i> {% trans "For Teachers" %}
+                        </h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">✓ {% trans "Manage student accounts easily" %}</li>
+                            <li class="list-group-item">✓ {% trans "Reward students with coins" %}</li>
+                            <li class="list-group-item">✓ {% trans "Track attendance automatically" %}</li>
+                            <li class="list-group-item">✓ {% trans "Create virtual store products" %}</li>
+                            <li class="list-group-item">✓ {% trans "View real-time analytics" %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- For Students -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">
+                            <i class="fas fa-graduation-cap"></i> {% trans "For Students" %}
+                        </h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">✓ {% trans "Earn coins for achievements" %}</li>
+                            <li class="list-group-item">✓ {% trans "Compete in global rankings" %}</li>
+                            <li class="list-group-item">✓ {% trans "Track attendance records" %}</li>
+                            <li class="list-group-item">✓ {% trans "Purchase items from store" %}</li>
+                            <li class="list-group-item">✓ {% trans "View transaction history" %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">{% trans "Why Use Our System?" %}</h2>
+        
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h3 class="text-primary">📊</h3>
+                    <h5>{% trans "Gamification" %}</h5>
+                    <p class="text-muted">{% trans "Boost motivation through points and rankings" %}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h3 class="text-success">🎯</h3>
+                    <h5>{% trans "Easy Management" %}</h5>
+                    <p class="text-muted">{% trans "Simple interface for teachers and students" %}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h3 class="text-info">🌍</h3>
+                    <h5>{% trans "Multilingual" %}</h5>
+                    <p class="text-muted">{% trans "Support for Arabic and English" %}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h3 class="text-warning">📱</h3>
+                    <h5>{% trans "Responsive Design" %}</h5>
+                    <p class="text-muted">{% trans "Works on all devices" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="mb-4">{% trans "Ready to Get Started?" %}</h2>
+        <p class="lead mb-4">{% trans "Join thousands of educators using our system to motivate students." %}</p>
+        
+        {% if not user.is_authenticated %}
+            <a href="{% url 'rewards_app:register' %}" class="btn btn-light btn-lg">
+                {% trans "Create Account Now" %}
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

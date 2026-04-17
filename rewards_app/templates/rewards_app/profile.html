@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "User Profile" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">{% trans "Account Profile" %}</h4>
+                </div>
+                <div class="card-body">
+                    <!-- User Information Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted">{% trans "Basic Information" %}</h5>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Username" %}:</td>
+                                        <td>{{ user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Full Name" %}:</td>
+                                        <td>{{ user.get_full_name|default:"Not provided" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Email" %}:</td>
+                                        <td>{{ user.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Role" %}:</td>
+                                        <td>
+                                            {% if is_teacher %}
+                                                <span class="badge bg-danger">{% trans "Teacher" %}</span>
+                                            {% else %}
+                                                <span class="badge bg-success">{% trans "Student" %}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 class="text-muted">{% trans "Account Details" %}</h5>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Status" %}:</td>
+                                        <td>
+                                            {% if user.is_active %}
+                                                <span class="badge bg-success">{% trans "Active" %}</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">{% trans "Inactive" %}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Member Since" %}:</td>
+                                        <td>{{ user.date_joined|date:"SHORT_DATE_FORMAT" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Last Login" %}:</td>
+                                        <td>{{ user.last_login|date:"SHORT_DATETIME_FORMAT"|default:"Never" }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Student-Specific Information -->
+                    {% if is_student and student_profile %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-muted">{% trans "Student Statistics" %}</h5>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Total Coins" %}:</td>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">{{ student_profile.total_coins }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Rank" %}:</td>
+                                        <td>
+                                            <span class="badge bg-info">
+                                                #{{ student_profile.rank|default:"N/A" }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Attendance" %}:</td>
+                                        <td>{{ student_profile.attendance_count }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 class="text-muted">{% trans "Quick Stats" %}</h5>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Total Transactions" %}:</td>
+                                        <td>{{ student_profile.transactions.count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Total Purchases" %}:</td>
+                                        <td>{{ student_profile.orders.count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Member Level" %}:</td>
+                                        <td>
+                                            {% if student_profile.total_coins >= 1000 %}
+                                                <span class="badge bg-gold">{% trans "Gold" %}</span>
+                                            {% elif student_profile.total_coins >= 500 %}
+                                                <span class="badge bg-secondary">{% trans "Silver" %}</span>
+                                            {% else %}
+                                                <span class="badge bg-bronze">{% trans "Bronze" %}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="card-footer bg-light">
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'rewards_app:home' %}" class="btn btn-secondary">
+                            <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                        </a>
+                        {% if is_student %}
+                            <a href="{% url 'rewards_app:student_dashboard' %}" class="btn btn-primary">
+                                <i class="bi bi-speedometer2"></i> {% trans "Dashboard" %}
+                            </a>
+                        {% elif is_teacher %}
+                            <a href="{% url 'rewards_app:teacher_dashboard' %}" class="btn btn-primary">
+                                <i class="bi bi-speedometer2"></i> {% trans "Dashboard" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

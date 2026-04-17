@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Student Details" %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>
+                <i class="fas fa-user"></i> {{ student.user.get_full_name }}
+            </h2>
+            <p class="text-muted">@{{ student.user.username }}</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'rewards_app:manage_students' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> {% trans "Back" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Total Coins" %}</h5>
+                    <h2 class="text-warning"><i class="fas fa-coins"></i> {{ student.total_coins }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Rank Position" %}</h5>
+                    <h2 class="text-info"><i class="fas fa-trophy"></i> #{{ student.rank }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Attendance" %}</h5>
+                    <h2 class="text-success"><i class="fas fa-calendar-check"></i> {{ student.attendance_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Attendance %" %}</h5>
+                    <h2 class="text-primary">{{ attendance_percentage|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions" type="button" role="tab">
+                {% trans "Transactions" %} ({{ transactions|length }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="attendance-tab" data-bs-toggle="tab" data-bs-target="#attendance" type="button" role="tab">
+                {% trans "Attendance" %} ({{ attendances|length }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">
+                {% trans "Purchases" %} ({{ orders|length }})
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Transactions Tab -->
+        <div class="tab-pane fade show active" id="transactions" role="tabpanel">
+            {% if transactions %}
+                <table class="table table-sm mt-3">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Date" %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Coins" %}</th>
+                            <th>{% trans "Reason" %}</th>
+                            <th>{% trans "By" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.created_at|date:"M d, Y H:i" }}</td>
+                                <td><span class="badge bg-secondary">{{ transaction.get_transaction_type_display }}</span></td>
+                                <td><strong>{{ transaction.coins }}</strong></td>
+                                <td>{{ transaction.reason|truncatewords:10 }}</td>
+                                <td>
+                                    {% if transaction.created_by %}
+                                        {{ transaction.created_by.get_full_name|default:transaction.created_by.username }}
+                                    {% else %}
+                                        <em class="text-muted">{% trans "System" %}</em>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="alert alert-info mt-3">{% trans "No transactions yet." %}</p>
+            {% endif %}
+        </div>
+
+        <!-- Attendance Tab -->
+        <div class="tab-pane fade" id="attendance" role="tabpanel">
+            {% if attendances %}
+                <table class="table table-sm mt-3">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Date" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Marked By" %}</th>
+                            <th>{% trans "Notes" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendance in attendances %}
+                            <tr>
+                                <td>{{ attendance.date }}</td>
+                                <td>
+                                    {% if attendance.status == 'present' %}
+                                        <span class="badge bg-success">{% trans "Present" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">{% trans "Absent" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if attendance.marked_by %}
+                                        {{ attendance.marked_by.get_full_name|default:attendance.marked_by.username }}
+                                    {% else %}
+                                        <em class="text-muted">{% trans "System" %}</em>
+                                    {% endif %}
+                                </td>
+                                <td>{{ attendance.notes|default:"-" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="alert alert-info mt-3">{% trans "No attendance records yet." %}</p>
+            {% endif %}
+        </div>
+
+        <!-- Orders Tab -->
+        <div class="tab-pane fade" id="orders" role="tabpanel">
+            {% if orders %}
+                <table class="table table-sm mt-3">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Date" %}</th>
+                            <th>{% trans "Product" %}</th>
+                            <th>{% trans "Coins Spent" %}</th>
+                            <th>{% trans "Quantity" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                                <td>{{ order.product.name|default:"-" }}</td>
+                                <td>{{ order.coins_spent }}</td>
+                                <td>{{ order.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="alert alert-info mt-3">{% trans "No purchases yet." %}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

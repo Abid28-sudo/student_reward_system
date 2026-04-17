@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Store" %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">
+        <i class="fas fa-shopping-cart"></i> {% trans "Welcome to the Store!" %}
+    </h2>
+
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-coins"></i>
+        {% blocktrans with coins=student.total_coins %}Your current balance: <strong>{{ coins }} coins</strong>{% endblocktrans %}
+        <a href="{% url 'rewards_app:student_dashboard' %}" class="btn btn-sm btn-primary">{% trans "View Balance" %}</a>
+    </div>
+
+    {% if products %}
+        <div class="row g-4">
+            {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text text-muted" style="height: 60px; overflow: hidden;">
+                                {{ product.description|default:"No description" }}
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-coins"></i> {{ product.price }}
+                                </span>
+                                {% if product.quantity_available == -1 %}
+                                    <span class="badge bg-success">{% trans "In Stock" %}</span>
+                                {% elif product.quantity_available > 0 %}
+                                    <span class="badge bg-info">{{ product.quantity_available }} {% trans "left" %}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{% trans "Out of Stock" %}</span>
+                                {% endif %}
+                            </div>
+
+                            <form method="post" action="{% url 'rewards_app:purchase_product' product.pk %}">
+                                {% csrf_token %}
+                                <div class="input-group mb-3">
+                                    <input type="number" name="quantity" class="form-control" value="1" min="1" max="10">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100" 
+                                    {% if not product.is_available %}disabled{% endif %}>
+                                    <i class="fas fa-shopping-bag"></i>
+                                    {% trans "Purchase" %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">{% trans "First" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{% trans "Last" %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-exclamation-circle"></i>
+            {% trans "No products available in the store at the moment." %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

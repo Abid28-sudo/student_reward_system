@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Purchase History" %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">
+        <i class="fas fa-receipt"></i> {% trans "Purchase History" %}
+    </h2>
+
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Product" %}</th>
+                        <th>{% trans "Quantity" %}</th>
+                        <th>{% trans "Coins Spent" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                {% if order.product %}
+                                    <strong>{{ order.product.name }}</strong>
+                                {% else %}
+                                    <em class="text-muted">{% trans "Product removed" %}</em>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ order.quantity }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-coins"></i> {{ order.coins_spent }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans "Total Purchases" %}</h5>
+                        <h2 class="text-success">{{ orders|length }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans "Total Coins Spent" %}</h5>
+                        <h2 class="text-danger">
+                            <i class="fas fa-coins"></i>
+                            {% for order in orders %}
+                                {{ order.coins_spent|add:0 }}
+                            {% endfor %}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans "Average Cost" %}</h5>
+                        <h2 class="text-info">
+                            <i class="fas fa-coins"></i>
+                            {% widthratio total_spent orders|length 1 %}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">{% trans "First" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{% trans "Last" %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            {% trans "You haven't made any purchases yet. " %}
+            <a href="{% url 'rewards_app:browse_store' %}">{% trans "Visit the store" %}</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

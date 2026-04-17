@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Mark Attendance" %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>
+                <i class="fas fa-calendar-check"></i> {% trans "Mark Attendance" %}
+            </h2>
+            <p class="text-muted">{% trans "Today:" %} <strong>{{ today|date:"M d, Y" }}</strong></p>
+        </div>
+    </div>
+
+    {% if students %}
+        <div class="card">
+            <div class="card-body">
+                <form method="post" id="attendanceForm">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="studentSelect" class="form-label">{% trans "Select Student" %}</label>
+                        <select name="student_id" id="studentSelect" class="form-select" required>
+                            <option value="">-- {% trans "Choose a student" %} --</option>
+                            {% for student in students %}
+                                <option value="{{ student.pk }}">{{ student.user.get_full_name }} ({{ student.user.username }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Status" %}</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="presentRadio" value="present" required>
+                            <label class="form-check-label" for="presentRadio">
+                                <i class="fas fa-check-circle text-success"></i> {% trans "Present" %}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="absentRadio" value="absent">
+                            <label class="form-check-label" for="absentRadio">
+                                <i class="fas fa-times-circle text-danger"></i> {% trans "Absent" %}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="dateInput" class="form-label">{% trans "Date" %}</label>
+                        <input type="date" name="date" id="dateInput" class="form-control" value="{{ today|date:'Y-m-d' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notesInput" class="form-label">{% trans "Notes (Optional)" %}</label>
+                        <textarea name="notes" id="notesInput" class="form-control" rows="3" placeholder="{% trans 'Add any notes' %}"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> {% trans "Mark Attendance" %}
+                    </button>
+                    <a href="{% url 'rewards_app:teacher_dashboard' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> {% trans "Cancel" %}
+                    </a>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            {% trans "No students available." %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

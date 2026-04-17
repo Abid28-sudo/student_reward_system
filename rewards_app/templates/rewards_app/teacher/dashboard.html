@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Teacher Dashboard" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2">
+                <i class="fas fa-chalkboard-user"></i> {% trans "Teacher Dashboard" %}
+            </h1>
+            <p class="text-muted">{% trans "Welcome back!" %} {{ request.user.get_full_name }}</p>
+        </div>
+    </div>
+
+    <!-- Statistics Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="dashboard-stat-card">
+                <h4>{{ total_students }}</h4>
+                <p><i class="fas fa-users"></i> {% trans "Total Students" %}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-stat-card coins">
+                <h4>{{ top_coins_students|length }}</h4>
+                <p><i class="fas fa-star"></i> {% trans "Top Performers" %}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-stat-card attendance">
+                <h4>{{ recent_attendances|length }}</h4>
+                <p><i class="fas fa-calendar-check"></i> {% trans "Recent Attendance" %}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-stat-card rank">
+                <h4>{{ recent_transactions|length }}</h4>
+                <p><i class="fas fa-coins"></i> {% trans "Transactions" %}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Quick Actions" %}</h5>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'rewards_app:add_student' %}" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> {% trans "Add Student" %}
+                        </a>
+                        <a href="{% url 'rewards_app:reward_student' %}" class="btn btn-success">
+                            <i class="fas fa-gift"></i> {% trans "Reward Student" %}
+                        </a>
+                        <a href="{% url 'rewards_app:mark_attendance' %}" class="btn btn-info">
+                            <i class="fas fa-list-check"></i> {% trans "Mark Attendance" %}
+                        </a>
+                        <a href="{% url 'rewards_app:add_product' %}" class="btn btn-warning">
+                            <i class="fas fa-plus"></i> {% trans "Add Product" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Students Section -->
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-trophy"></i> {% trans "Top Students by Coins" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if top_coins_students %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Rank" %}</th>
+                                    <th>{% trans "Student" %}</th>
+                                    <th>{% trans "Coins" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in top_coins_students %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-primary">{{ forloop.counter }}</span>
+                                    </td>
+                                    <td>{{ student.user.get_full_name }}</td>
+                                    <td>
+                                        <span class="badge bg-warning">{{ student.total_coins }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted">{% trans "No students yet." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-check"></i> {% trans "Top Students by Attendance" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if top_attendance_students %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Rank" %}</th>
+                                    <th>{% trans "Student" %}</th>
+                                    <th>{% trans "Present Days" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in top_attendance_students %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-success">{{ forloop.counter }}</span>
+                                    </td>
+                                    <td>{{ student.user.get_full_name }}</td>
+                                    <td>
+                                        <span class="badge bg-info">{{ student.attendance_count }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted">{% trans "No attendance records yet." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history"></i> {% trans "Recent Transactions" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_transactions %}
+                        <div style="max-height: 400px; overflow-y: auto;">
+                            {% for transaction in recent_transactions %}
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong>{{ transaction.student.user.get_full_name }}</strong><br>
+                                <small class="text-muted">
+                                    +{{ transaction.coins }} {% trans "coins" %} • {{ transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                                </small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">{% trans "No transactions yet." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-person-booth"></i> {% trans "Recent Attendance" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_attendances %}
+                        <div style="max-height: 400px; overflow-y: auto;">
+                            {% for attendance in recent_attendances %}
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong>{{ attendance.student.user.get_full_name }}</strong><br>
+                                <small class="text-muted">
+                                    {% if attendance.status == 'present' %}
+                                        <span class="badge bg-success">{% trans "Present" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">{% trans "Absent" %}</span>
+                                    {% endif %}
+                                    • {{ attendance.date }}
+                                </small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">{% trans "No attendance records yet." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

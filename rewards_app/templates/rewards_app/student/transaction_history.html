@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Transaction History" %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">
+        <i class="fas fa-history"></i> {% trans "Transaction History" %}
+    </h2>
+
+    {% if transactions %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Coins" %}</th>
+                        <th>{% trans "Reason" %}</th>
+                        <th>{% trans "By" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.created_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                {% if transaction.transaction_type == 'reward' %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-plus-circle"></i> {% trans "Reward" %}
+                                    </span>
+                                {% elif transaction.transaction_type == 'spend' %}
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-minus-circle"></i> {% trans "Spend" %}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        {% trans "Adjustment" %}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong class="{% if transaction.transaction_type == 'reward' %}text-success{% else %}text-danger{% endif %}">
+                                    {% if transaction.transaction_type == 'reward' %}+{% else %}-{% endif %}{{ transaction.coins }}
+                                </strong>
+                            </td>
+                            <td>{{ transaction.reason|truncatewords:15 }}</td>
+                            <td>
+                                {% if transaction.created_by %}
+                                    {{ transaction.created_by.get_full_name|default:transaction.created_by.username }}
+                                {% else %}
+                                    <em class="text-muted">{% trans "System" %}</em>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">{% trans "First" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{% trans "Last" %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info">
+            {% trans "No transactions yet." %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
