@@ -15,14 +15,14 @@ from .models import (
 @admin.register(CustomUser)
 class CustomUserAdmin(BaseUserAdmin):
     """Admin interface for CustomUser"""
-    list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'is_staff', 'created_at')
-    list_filter = ('role', 'is_staff', 'is_active', 'created_at')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'status', 'is_approved', 'is_active', 'created_at')
+    list_filter = ('role', 'status', 'is_approved', 'is_active', 'created_at')
     search_fields = ('username', 'email', 'first_name', 'last_name')
     ordering = ('-created_at',)
     
     fieldsets = BaseUserAdmin.fieldsets + (
         (_('User Information'), {
-            'fields': ('role', 'is_teacher', 'created_at', 'updated_at')
+            'fields': ('role', 'is_teacher', 'status', 'is_approved', 'created_at', 'updated_at')
         }),
     )
     

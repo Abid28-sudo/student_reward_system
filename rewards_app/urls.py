@@ -17,6 +17,9 @@ urlpatterns = [
     
     # Teacher URLs
     path('teacher/dashboard/', views.teacher_dashboard, name='teacher_dashboard'),
+    path('teacher/pending-teachers/', views.pending_teachers, name='pending_teachers'),
+    path('teacher/approve/<int:teacher_id>/', views.approve_teacher, name='approve_teacher'),
+    path('teacher/reject/<int:teacher_id>/', views.reject_teacher, name='reject_teacher'),
     path('teacher/students/', views.manage_students, name='manage_students'),
     path('teacher/students/<int:student_id>/', views.student_detail, name='student_detail'),
     path('teacher/students/add/', views.add_student, name='add_student'),

@@ -25,7 +25,7 @@
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{% trans "Full Name" %}:</td>
-                                        <td>{{ user.get_full_name|default:"Not provided" }}</td>
+                                        <td>{{ user.get_full_name|default:_("Not provided") }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{% trans "Email" %}:</td>
@@ -65,7 +65,7 @@
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{% trans "Last Login" %}:</td>
-                                        <td>{{ user.last_login|date:"SHORT_DATETIME_FORMAT"|default:"Never" }}</td>
+                                        <td>{{ user.last_login|date:"SHORT_DATETIME_FORMAT"|default:_("Never") }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -90,7 +90,7 @@
                                         <td class="fw-bold">{% trans "Rank" %}:</td>
                                         <td>
                                             <span class="badge bg-info">
-                                                #{{ student_profile.rank|default:"N/A" }}
+                                                #{{ student_profile.rank|default:_("N/A") }}
                                             </span>
                                         </td>
                                     </tr>

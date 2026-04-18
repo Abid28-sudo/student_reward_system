@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%10>=3 && n%10<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 
 # Navigation and UI
-msgid "Student Reward System"
+msgid "IMAM SHATTIIBI CENTER"
 msgstr "نظام مكافآت الطلاب"
 
 msgid "Dashboard"
@@ -79,10 +79,10 @@ msgid "Registration successful! Please log in."
 msgstr "تم التسجيل بنجاح! يرجى تسجيل الدخول."
 
 msgid "Welcome back, Teacher!"
-msgstr "أهلاً وسهلاً بك يا معلم!"
+msgstr "!أهلاً وسهلاً بك يا معلم"
 
 msgid "Welcome back, Student!"
-msgstr "أهلاً وسهلاً بك يا طالب!"
+msgstr "!أهلاً وسهلاً بك يا طالب"
 
 msgid "You have been logged out successfully."
 msgstr "تم تسجيل الخروج بنجاح."
@@ -311,17 +311,176 @@ msgstr "الطلاب الفريدون"
 msgid "Total Coins Spent"
 msgstr "إجمالي العملات المنفقة"
 
-msgid "Change Theme"
-msgstr "تغيير المظهر"
-
-msgid "Standard"
-msgstr "معياري"
-
-msgid "Warm Brown"
-msgstr "بني دافئ"
-
-msgid "Dark Blue"
-msgstr "أزرق غامق"
-
 msgid "Collections"
 msgstr "المجموعات"
+
+# Missing default values and labels
+msgid "Not provided"
+msgstr "لم يتم توفيره"
+
+msgid "Never"
+msgstr "لم يحدث أبدا"
+
+msgid "N/A"
+msgstr "غير متاح"
+
+msgid "No description"
+msgstr "لا توجد وصفة"
+
+msgid "YOU"
+msgstr "أنت"
+
+msgid "Page"
+msgstr "صفحة"
+
+msgid "of"
+msgstr "من"
+
+msgid "x"
+msgstr "×"
+
+# Additional UI elements
+msgid "Enter email"
+msgstr "أدخل البريد الإلكتروني"
+
+msgid "First name"
+msgstr "الاسم الأول"
+
+msgid "Last name"
+msgstr "اسم العائلة"
+
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgid "Password"
+msgstr "كلمة المرور"
+
+msgid "Select Student"
+msgstr "اختر الطالب"
+
+msgid "Enter number of coins"
+msgstr "أدخل عدد العملات"
+
+msgid "Why are you rewarding this student?"
+msgstr "لماذا تكافئ هذا الطالب؟"
+
+msgid "Enter product name"
+msgstr "أدخل اسم المنتج"
+
+msgid "Product description (optional)"
+msgstr "وصف المنتج (اختياري)"
+
+msgid "Enter price in coins"
+msgstr "أدخل السعر بالعملات"
+
+msgid "Add any notes (optional)"
+msgstr "أضف أي ملاحظات (اختياري)"
+
+msgid "Student Dashboard"
+msgstr "لوحة تحكم الطالب"
+
+msgid "Contact teachers"
+msgstr "التواصل مع المعلمين"
+
+msgid "IMAM SHATTIBI CENTER"
+msgstr "مركز الإمام الشاطبي"
+
+# Teacher Approval System
+msgid "Pending Teachers"
+msgstr "المعلمون المعلقون"
+
+msgid "Teacher Account Requests"
+msgstr "طلبات حسابات المعلمين"
+
+msgid "Pending Requests"
+msgstr "الطلبات المعلقة"
+
+msgid "Pending"
+msgstr "معلق"
+
+msgid "Approved"
+msgstr "موافق عليه"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "Requested On"
+msgstr "طُلب في"
+
+msgid "Actions"
+msgstr "الإجراءات"
+
+msgid "Approve"
+msgstr "الموافقة"
+
+msgid "Reject"
+msgstr "الرفض"
+
+msgid "No pending teacher requests."
+msgstr "لا توجد طلبات معلمين معلقة."
+
+msgid "Approved Teachers"
+msgstr "المعلمون المعتمدون"
+
+msgid "Approved On"
+msgstr "تمت الموافقة في"
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "Inactive"
+msgstr "غير نشط"
+
+msgid "Rejected Teachers"
+msgstr "المعلمون المرفوضون"
+
+msgid "Rejected On"
+msgstr "تم الرفض في"
+
+msgid "Approve Teacher"
+msgstr "الموافقة على المعلم"
+
+msgid "Reject Teacher"
+msgstr "رفض المعلم"
+
+msgid "Teacher Information"
+msgstr "معلومات المعلم"
+
+msgid "Full Name"
+msgstr "الاسم الكامل"
+
+msgid "Your teacher account is pending approval. Please wait for an administrator to review your request."
+msgstr "حسابك كمعلم قيد الموافقة. يرجى الانتظار حتى يقوم المسؤول بمراجعة طلبك."
+
+msgid "Approving this request will activate the teacher account and allow them to login immediately."
+msgstr "سيؤدي الموافقة على هذا الطلب إلى تفعيل حساب المعلم والسماح لهم بتسجيل الدخول فوراً."
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Reason for Rejection (optional)"
+msgstr "سبب الرفض (اختياري)"
+
+msgid "Explain why you are rejecting this application..."
+msgstr "اشرح سبب رفضك لهذا الطلب..."
+
+msgid "This will help the applicant understand the decision."
+msgstr "سيساعد هذا مقدم الطلب على فهم القرار."
+
+msgid "Rejecting this request will deactivate the teacher account. They can reapply later."
+msgstr "سيؤدي رفض هذا الطلب إلى تعطيل حساب المعلم. يمكنهم إعادة التقديم لاحقاً."
+
+msgid "Teacher account has been approved."
+msgstr "تمت الموافقة على حساب المعلم."
+
+msgid "Teacher account has been rejected."
+msgstr "تم رفض حساب المعلم."
+
+msgid "Is Approved"
+msgstr "تمت الموافقة عليه"
+
+msgid "Is Teacher"
+msgstr "معلم"
+
+msgid "Status"
+msgstr "الحالة"

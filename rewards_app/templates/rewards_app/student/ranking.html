@@ -43,7 +43,7 @@
                                     <td>
                                         {{ ranking.user.get_full_name }}
                                         {% if ranking.user.username == request.user.username %}
-                                            <span class="badge bg-info">YOU</span>
+                                            <span class="badge bg-info">{% trans "YOU" %}</span>
                                         {% endif %}
                                     </td>
                                     <td><span class="badge bg-warning">{{ ranking.total_coins }}</span></td>
@@ -56,7 +56,7 @@
             </div>
 
             <div class="col-md-4">
-                <div class="card sticky-top">
+                <div class="card fixed">
                     <div class="card-body text-center">
                         <h5 class="card-title">{% trans "Your Position" %}</h5>
                         <h2 class="text-primary mb-3">
@@ -90,7 +90,7 @@
                     {% endif %}
 
                     <li class="page-item disabled">
-                        <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                        <span class="page-link">{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}</span>
                     </li>
 
                     {% if page_obj.has_next %}

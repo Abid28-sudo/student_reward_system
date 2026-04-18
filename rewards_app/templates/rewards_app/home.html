@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Home" %} - {% trans "Student Reward System" %}{% endblock %}
+{% block title %}{% trans "Home" %} - {% trans "IMAM SHATTIBI CENTER" %}{% endblock %}
 
 {% block content %}
-<div class="hero-section bg-gradient py-5 text-white">
+<div class="hero-section bg-gradient py-5 text-dark">
     <div class="container text-center">
         <h1 class="display-4 fw-bold mb-4">
-            <i class="fas fa-star"></i> {% trans "Student Reward & Ranking System" %}
+            <i class="fas fa-star"></i> {% trans "IMAM SHATTIBI CENTER" %}
         </h1>
         <p class="lead mb-4">{% trans "Motivate and engage students through gamification, achievements, and friendly competition." %}</p>
         
@@ -15,7 +15,7 @@
             <a href="{% url 'rewards_app:login' %}" class="btn btn-light btn-lg me-2">
                 <i class="fas fa-sign-in-alt"></i> {% trans "Login" %}
             </a>
-            <a href="{% url 'rewards_app:register' %}" class="btn btn-outline-light btn-lg">
+            <a href="{% url 'rewards_app:register' %}" class="btn btn-light btn-lg ms-2">
                 <i class="fas fa-user-plus"></i> {% trans "Register" %}
             </a>
         {% else %}
@@ -108,7 +108,7 @@
                 <div class="stat-box">
                     <h3 class="text-warning">📱</h3>
                     <h5>{% trans "Responsive Design" %}</h5>
-                    <p class="text-muted">{% trans "Works on all devices" %}</p>
+                    <p class="text-muted">{% trans "Works on all devices and screen sizes" %}</p>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@
 <section class="py-5 bg-primary text-white text-center">
     <div class="container">
         <h2 class="mb-4">{% trans "Ready to Get Started?" %}</h2>
-        <p class="lead mb-4">{% trans "Join thousands of educators using our system to motivate students." %}</p>
+        <p class="lead mb-4">{% trans "Create your account now and start rewarding your students!" %}</p>
         
         {% if not user.is_authenticated %}
             <a href="{% url 'rewards_app:register' %}" class="btn btn-light btn-lg">

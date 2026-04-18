@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Pending Teachers" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">{% trans "Teacher Account Requests" %}</h1>
+            
+            <!-- Pending Requests -->
+            {% if pending_teachers %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">⏳ {% trans "Pending Requests" %} ({{ pending_teachers.count }})</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Name" %}</th>
+                                    <th>{% trans "Email" %}</th>
+                                    <th>{% trans "Username" %}</th>
+                                    <th>{% trans "Requested On" %}</th>
+                                    <th>{% trans "Actions" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in pending_teachers %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ teacher.get_full_name|default:teacher.username }}</strong>
+                                    </td>
+                                    <td>{{ teacher.email }}</td>
+                                    <td><code>{{ teacher.username }}</code></td>
+                                    <td>{{ teacher.created_at|date:"SHORT_DATE_FORMAT" }}</td>
+                                    <td>
+                                        <a href="{% url 'rewards_app:approve_teacher' teacher.id %}" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check"></i> {% trans "Approve" %}
+                                        </a>
+                                        <a href="{% url 'rewards_app:reject_teacher' teacher.id %}" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-times"></i> {% trans "Reject" %}
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> {% trans "No pending teacher requests." %}
+            </div>
+            {% endif %}
+            
+            <!-- Approved Teachers -->
+            {% if approved_teachers %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">✓ {% trans "Approved Teachers" %} ({{ approved_teachers.count }})</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Name" %}</th>
+                                    <th>{% trans "Email" %}</th>
+                                    <th>{% trans "Username" %}</th>
+                                    <th>{% trans "Approved On" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in approved_teachers %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ teacher.get_full_name|default:teacher.username }}</strong>
+                                    </td>
+                                    <td>{{ teacher.email }}</td>
+                                    <td><code>{{ teacher.username }}</code></td>
+                                    <td>{{ teacher.updated_at|date:"SHORT_DATE_FORMAT" }}</td>
+                                    <td>
+                                        {% if teacher.is_active %}
+                                            <span class="badge bg-success">{% trans "Active" %}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{% trans "Inactive" %}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Rejected Teachers -->
+            {% if rejected_teachers %}
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">✗ {% trans "Rejected Teachers" %} ({{ rejected_teachers.count }})</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Name" %}</th>
+                                    <th>{% trans "Email" %}</th>
+                                    <th>{% trans "Username" %}</th>
+                                    <th>{% trans "Rejected On" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in rejected_teachers %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ teacher.get_full_name|default:teacher.username }}</strong>
+                                    </td>
+                                    <td>{{ teacher.email }}</td>
+                                    <td><code>{{ teacher.username }}</code></td>
+                                    <td>{{ teacher.updated_at|date:"SHORT_DATE_FORMAT" }}</td>
+                                    <td>
+                                        <span class="badge bg-danger">{% trans "Rejected" %}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

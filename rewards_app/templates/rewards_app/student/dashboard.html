@@ -169,7 +169,7 @@
                                                 <i class="fas fa-box" style="font-size: 2rem; color: #999;"></i>
                                             </div>
                                             <h6 class="card-title" style="font-size: 0.85rem; word-wrap: break-word;">{{ order.product.name|truncatewords:3 }}</h6>
-                                            <small class="text-muted d-block">x{{ order.quantity }}</small>
+                                            <small class="text-muted d-block">{% trans "x" %}{{ order.quantity }}</small>
                                             <small class="text-warning">{{ order.coins_spent }} {% trans "coins" %}</small>
                                             <div class="text-muted" style="font-size: 0.75rem; margin-top: 0.5rem;">
                                                 {{ order.created_at|date:"SHORT_DATE_FORMAT" }}

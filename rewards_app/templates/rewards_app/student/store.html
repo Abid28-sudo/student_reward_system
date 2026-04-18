@@ -31,7 +31,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
                             <p class="card-text text-muted" style="height: 60px; overflow: hidden;">
-                                {{ product.description|default:"No description" }}
+                                {{ product.description|default:_("No description") }}
                             </p>
                             
                             <div class="d-flex justify-content-between align-items-center mb-3">

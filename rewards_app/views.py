@@ -81,8 +81,22 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, _('Registration successful! Please log in.'))
+            user = form.save(commit=False)
+            
+            # If registering as teacher, set status to pending and deactivate until approved
+            if user.role == 'teacher':
+                user.status = 'pending'
+                user.is_approved = False
+                user.is_active = False  # Deactivate until approved
+                user.save()
+                messages.success(request, _('Registration successful! Your teacher account is pending approval. Please wait for an administrator to review your request.'))
+            else:
+                user.status = 'approved'
+                user.is_approved = True
+                user.is_active = True
+                user.save()
+                messages.success(request, _('Registration successful! Please log in.'))
+            
             return redirect('rewards_app:login')
         else:
             for field, errors in form.errors.items():
@@ -141,6 +155,55 @@ def teacher_dashboard(request):
         'recent_attendances': Attendance.objects.select_related('student').order_by('-date')[:10],
     }
     return render(request, 'rewards_app/teacher/dashboard.html', context)
+
+
+@teacher_required
+def pending_teachers(request):
+    """View and manage pending teacher requests"""
+    pending = CustomUser.objects.filter(role='teacher', status='pending').order_by('created_at')
+    approved = CustomUser.objects.filter(role='teacher', status='approved').order_by('-created_at')
+    rejected = CustomUser.objects.filter(role='teacher', status='rejected').order_by('-created_at')
+    
+    context = {
+        'pending_teachers': pending,
+        'approved_teachers': approved,
+        'rejected_teachers': rejected,
+    }
+    return render(request, 'rewards_app/teacher/pending_teachers.html', context)
+
+
+@teacher_required
+def approve_teacher(request, teacher_id):
+    """Approve a pending teacher account"""
+    teacher = get_object_or_404(CustomUser, pk=teacher_id, role='teacher', status='pending')
+    
+    if request.method == 'POST':
+        teacher.status = 'approved'
+        teacher.is_approved = True
+        teacher.is_active = True
+        teacher.save()
+        messages.success(request, _('Teacher account has been approved.'))
+        return redirect('rewards_app:pending_teachers')
+    
+    return render(request, 'rewards_app/teacher/approve_teacher.html', {'teacher': teacher})
+
+
+@teacher_required
+def reject_teacher(request, teacher_id):
+    """Reject a pending teacher account"""
+    teacher = get_object_or_404(CustomUser, pk=teacher_id, role='teacher', status='pending')
+    
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '')
+        teacher.status = 'rejected'
+        teacher.is_approved = False
+        teacher.is_active = False
+        teacher.save()
+        # TODO: Send email to teacher with rejection reason
+        messages.success(request, _('Teacher account has been rejected.'))
+        return redirect('rewards_app:pending_teachers')
+    
+    return render(request, 'rewards_app/teacher/reject_teacher.html', {'teacher': teacher})
 
 
 @teacher_required

@@ -20,6 +20,12 @@ class CustomUser(AbstractUser):
         ('student', _('Student')),
     ]
     
+    STATUS_CHOICES = [
+        ('pending', _('Pending')),
+        ('approved', _('Approved')),
+        ('rejected', _('Rejected')),
+    ]
+    
     role = models.CharField(
         max_length=10,
         choices=ROLE_CHOICES,
@@ -29,6 +35,17 @@ class CustomUser(AbstractUser):
     is_teacher = models.BooleanField(
         default=False,
         verbose_name=_('Is Teacher')
+    )
+    # Teacher approval system
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        verbose_name=_('Status')
+    )
+    is_approved = models.BooleanField(
+        default=False,
+        verbose_name=_('Is Approved')
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
