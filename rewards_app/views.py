@@ -24,7 +24,8 @@ from .models import (
 )
 from .forms import (
     CustomUserCreationForm, CustomAuthenticationForm, RewardStudentForm,
-    MarkAttendanceForm, AddProductForm, PurchaseProductForm
+    MarkAttendanceForm, AddProductForm, PurchaseProductForm, EditProfileForm,
+    ChangePasswordForm, BulkMarkAttendanceForm
 )
 
 
@@ -314,38 +315,124 @@ def reward_student(request):
 
 @teacher_required
 def mark_attendance(request):
-    """Mark student attendance"""
+    """Mark student attendance - individual or bulk"""
     if request.method == 'POST':
-        student_id = request.POST.get('student_id')
-        status = request.POST.get('status')
-        date_str = request.POST.get('date')
-        notes = request.POST.get('notes', '')
+        form_type = request.POST.get('form_type', 'individual')
         
-        student = get_object_or_404(StudentProfile, pk=student_id)
-        
-        # Create or update attendance
-        attendance, created = Attendance.objects.update_or_create(
-            student=student,
-            date=date_str,
-            defaults={
-                'status': status,
-                'marked_by': request.user,
-                'notes': notes
-            }
-        )
-        
-        # Update student's attendance count
-        student.attendance_count = student.attendances.filter(status=AttendanceStatus.PRESENT).count()
-        student.save(update_fields=['attendance_count'])
-        student.update_rank()
-        
-        messages.success(request, _('Attendance marked successfully!'))
-        return redirect('rewards_app:manage_students')
+        if form_type == 'bulk':
+            # Handle bulk attendance marking
+            form = BulkMarkAttendanceForm(request.POST)
+            if form.is_valid():
+                date = form.cleaned_data['date']
+                status = form.cleaned_data['status']
+                notes = form.cleaned_data.get('notes', '')
+                
+                # Get all students
+                students = StudentProfile.objects.all()
+                
+                # Mark attendance for each student
+                count = 0
+                for student in students:
+                    attendance, created = Attendance.objects.update_or_create(
+                        student=student,
+                        date=date,
+                        defaults={
+                            'status': status,
+                            'marked_by': request.user,
+                            'notes': notes
+                        }
+                    )
+                    
+                    # Update student's attendance count
+                    student.attendance_count = student.attendances.filter(status=AttendanceStatus.PRESENT).count()
+                    student.save(update_fields=['attendance_count'])
+                    student.update_rank()
+                    count += 1
+                
+                messages.success(request, _('Attendance marked for %(count)d students!') % {'count': count})
+                return redirect('rewards_app:manage_students')
+        else:
+            # Handle individual student attendance marking
+            student_id = request.POST.get('student_id')
+            status = request.POST.get('status')
+            date_str = request.POST.get('date')
+            notes = request.POST.get('notes', '')
+            
+            student = get_object_or_404(StudentProfile, pk=student_id)
+            
+            # Create or update attendance
+            attendance, created = Attendance.objects.update_or_create(
+                student=student,
+                date=date_str,
+                defaults={
+                    'status': status,
+                    'marked_by': request.user,
+                    'notes': notes
+                }
+            )
+            
+            # Update student's attendance count
+            student.attendance_count = student.attendances.filter(status=AttendanceStatus.PRESENT).count()
+            student.save(update_fields=['attendance_count'])
+            student.update_rank()
+            
+            messages.success(request, _('Attendance marked successfully!'))
+            return redirect('rewards_app:manage_students')
     
-    # Bulk attendance marking
+    # GET request - display form with both individual and bulk options
     students = StudentProfile.objects.select_related('user').all()
-    context = {'students': students, 'today': timezone.now().date()}
+    bulk_form = BulkMarkAttendanceForm()
+    context = {
+        'students': students, 
+        'today': timezone.now().date(),
+        'bulk_form': bulk_form,
+        'total_students': StudentProfile.objects.count(),
+    }
     return render(request, 'rewards_app/teacher/mark_attendance.html', context)
+
+
+@teacher_required
+def mark_all_attendance(request):
+    """Mark all students attendance at once"""
+    if request.method == 'POST':
+        form = BulkMarkAttendanceForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            status = form.cleaned_data['status']
+            notes = form.cleaned_data.get('notes', '')
+            
+            # Get all students
+            students = StudentProfile.objects.all()
+            
+            # Mark attendance for each student
+            count = 0
+            for student in students:
+                attendance, created = Attendance.objects.update_or_create(
+                    student=student,
+                    date=date,
+                    defaults={
+                        'status': status,
+                        'marked_by': request.user,
+                        'notes': notes
+                    }
+                )
+                
+                # Update student's attendance count
+                student.attendance_count = student.attendances.filter(status=AttendanceStatus.PRESENT).count()
+                student.save(update_fields=['attendance_count'])
+                student.update_rank()
+                count += 1
+            
+            messages.success(request, _('Attendance marked for %(count)d students!') % {'count': count})
+            return redirect('rewards_app:teacher_dashboard')
+    else:
+        form = BulkMarkAttendanceForm()
+    
+    context = {
+        'form': form,
+        'total_students': StudentProfile.objects.count(),
+    }
+    return render(request, 'rewards_app/teacher/mark_all_attendance.html', context)
 
 
 @teacher_required
@@ -687,3 +774,38 @@ def profile(request):
         'is_teacher': user.role == 'teacher',
     }
     return render(request, 'rewards_app/profile.html', context)
+
+
+@login_required
+def edit_profile(request):
+    """Edit user profile information"""
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+        password_form = ChangePasswordForm(request.user, request.POST)
+        
+        if 'edit_profile' in request.POST:
+            if form.is_valid():
+                form.save()
+                messages.success(request, _('Profile updated successfully!'))
+                return redirect('rewards_app:profile')
+        elif 'change_password' in request.POST:
+            if password_form.is_valid():
+                new_password = password_form.cleaned_data.get('new_password')
+                request.user.set_password(new_password)
+                request.user.save()
+                # Re-authenticate with new password
+                from django.contrib.auth import update_session_auth_hash
+                update_session_auth_hash(request, request.user)
+                messages.success(request, _('Password changed successfully!'))
+                return redirect('rewards_app:profile')
+    else:
+        form = EditProfileForm(instance=request.user)
+        password_form = ChangePasswordForm(request.user)
+    
+    context = {
+        'form': form,
+        'password_form': password_form,
+        'is_teacher': request.user.role == 'teacher',
+        'is_student': request.user.role == 'student',
+    }
+    return render(request, 'rewards_app/edit_profile.html', context)

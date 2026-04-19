@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Bulk Mark Attendance" %} | {% trans "Student Reward System" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-calendar-check"></i>
+                        {% trans "Mark All Students Attendance" %}
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <form method="POST" class="form">
+                        {% csrf_token %}
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.date.id_for_label }}" class="form-label">
+                                    {% trans "Date" %}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input 
+                                    type="date" 
+                                    name="date" 
+                                    id="{{ form.date.id_for_label }}"
+                                    class="form-control {% if form.date.errors %}is-invalid{% endif %}"
+                                    value="{{ form.date.value }}"
+                                    required
+                                >
+                                {% if form.date.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.date.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.status.id_for_label }}" class="form-label">
+                                    {% trans "Mark As" %}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select 
+                                    name="status" 
+                                    id="{{ form.status.id_for_label }}"
+                                    class="form-select {% if form.status.errors %}is-invalid{% endif %}"
+                                    required
+                                >
+                                    <option value="">{% trans "Select Status" %}</option>
+                                    {% for value, label in form.status.field.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}" {% if form.status.value == value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% if form.status.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.status.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.notes.id_for_label }}" class="form-label">
+                                    {% trans "Notes (Optional)" %}
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="notes" 
+                                    id="{{ form.notes.id_for_label }}"
+                                    class="form-control {% if form.notes.errors %}is-invalid{% endif %}"
+                                    value="{{ form.notes.value }}"
+                                    placeholder="{% trans 'Add optional notes' %}"
+                                >
+                                {% if form.notes.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.notes.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Summary Section -->
+                        <div class="alert alert-info mb-4">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>{% trans "Students to be marked:" %}</strong> {{ total_students }}
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i>
+                                {% trans "Mark All Students" %}
+                            </button>
+                            <a href="{% url 'rewards_app:teacher_dashboard' %}" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i>
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Help Section -->
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-question-circle"></i>
+                        {% trans "How to Use" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>{% trans "Step 1:" %}</strong>
+                            {% trans "Select the date for attendance marking" %}
+                        </li>
+                        <li class="mb-2">
+                            <strong>{% trans "Step 2:" %}</strong>
+                            {% trans "Choose whether to mark all students as Present or Absent" %}
+                        </li>
+                        <li class="mb-2">
+                            <strong>{% trans "Step 3:" %}</strong>
+                            {% trans "Optionally add notes (e.g., 'Holiday', 'Special Event')" %}
+                        </li>
+                        <li>
+                            <strong>{% trans "Step 4:" %}</strong>
+                            {% trans "Click 'Mark All Students' to confirm" %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

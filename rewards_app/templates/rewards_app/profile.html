@@ -134,19 +134,24 @@
                 </div>
 
                 <div class="card-footer bg-light">
-                    <div class="btn-group" role="group">
-                        <a href="{% url 'rewards_app:home' %}" class="btn btn-secondary">
-                            <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'rewards_app:home' %}" class="btn btn-secondary">
+                                <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                            </a>
+                            {% if is_student %}
+                                <a href="{% url 'rewards_app:student_dashboard' %}" class="btn btn-primary">
+                                    <i class="bi bi-speedometer2"></i> {% trans "Dashboard" %}
+                                </a>
+                            {% elif is_teacher %}
+                                <a href="{% url 'rewards_app:teacher_dashboard' %}" class="btn btn-primary">
+                                    <i class="bi bi-speedometer2"></i> {% trans "Dashboard" %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'rewards_app:edit_profile' %}" class="btn btn-warning">
+                            <i class="bi bi-pencil-square"></i> {% trans "Edit Profile" %}
                         </a>
-                        {% if is_student %}
-                            <a href="{% url 'rewards_app:student_dashboard' %}" class="btn btn-primary">
-                                <i class="bi bi-speedometer2"></i> {% trans "Dashboard" %}
-                            </a>
-                        {% elif is_teacher %}
-                            <a href="{% url 'rewards_app:teacher_dashboard' %}" class="btn btn-primary">
-                                <i class="bi bi-speedometer2"></i> {% trans "Dashboard" %}
-                            </a>
-                        {% endif %}
                     </div>
                 </div>
             </div>

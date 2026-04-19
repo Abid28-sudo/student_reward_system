@@ -140,32 +140,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">{% trans "Unique Students" %}</h5>
-                    <h2 class="text-info"><i class="fas fa-users"></i> {{ students|length }}</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">{% trans "Total Coins Spent" %}</h5>
-                    <h2 class="text-success">
-                        <i class="fas fa-coins"></i> 
-                        {% if orders %}
-                            {% with total=0 %}
-                                {% for order in orders %}
-                                    {% comment %} This is a workaround for summing in template {% endcomment %}
-                                {% endfor %}
-                            {% endwith %}
-                        {% endif %}
-                        -
-                    </h2>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 {% endblock %}

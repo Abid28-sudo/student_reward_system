@@ -395,6 +395,69 @@ msgstr "طلبات حسابات المعلمين"
 msgid "Pending Requests"
 msgstr "الطلبات المعلقة"
 
+msgid "Mark Individual Student"
+msgstr "تسجيل حضور الطالب الفردي"
+
+msgid "Mark Student Attendance"
+msgstr "تسجيل حضور الطالب"
+
+msgid "Choose a student"
+msgstr "اختر طالباً"
+
+msgid "Today:"
+msgstr "اليوم:"
+
+msgid "No students available."
+msgstr "لا توجد طلاب متاحون."
+
+msgid "Add any notes"
+msgstr "أضف أي ملاحظات"
+
+msgid "No students available."
+msgstr "لا توجد طلاب متاحون."
+
+msgid "Present"
+msgstr "حاضر"
+
+msgid "Absent"
+msgstr "غائب"
+
+msgid "First Name"
+msgstr "الاسم الأول"
+
+msgid "Last Name"
+msgstr "اسم العائلة"
+
+msgid "Email Address"
+msgstr "عنوان البريد الإلكتروني"
+
+msgid "Student Reward System"
+msgstr "نظام مكافآت الطلاب"
+
+msgid "User Profile"
+msgstr "ملف تعريف المستخدم"
+
+msgid "Account Profile"
+msgstr "ملف حساب المستخدم"
+
+msgid "Basic Information"
+msgstr "معلومات أساسية"
+
+msgid "Account Details"
+msgstr "تفاصيل الحساب"
+
+msgid "Member Since"
+msgstr "عضو منذ"
+
+msgid "Last Login"
+msgstr "آخر تسجيل دخول"
+
+msgid "Student Statistics"
+msgstr "إحصائيات الطالب"
+
+msgid "Quick Stats"
+msgstr "إحصائيات سريعة"
+
 msgid "Pending"
 msgstr "معلق"
 
@@ -484,3 +547,148 @@ msgstr "معلم"
 
 msgid "Status"
 msgstr "الحالة"
+
+# Edit Profile Feature
+msgid "Edit Profile"
+msgstr "تعديل الملف الشخصي"
+
+msgid "Edit Profile Information"
+msgstr "تعديل معلومات الملف الشخصي"
+
+msgid "Change Password"
+msgstr "تغيير كلمة المرور"
+
+msgid "Current Password"
+msgstr "كلمة المرور الحالية"
+
+msgid "New Password"
+msgstr "كلمة المرور الجديدة"
+
+msgid "Confirm Password"
+msgstr "تأكيد كلمة المرور"
+
+msgid "Profile updated successfully!"
+msgstr "تم تحديث الملف الشخصي بنجاح!"
+
+msgid "Password changed successfully!"
+msgstr "تم تغيير كلمة المرور بنجاح!"
+
+msgid "Password must be at least 8 characters long"
+msgstr "يجب أن تكون كلمة المرور على الأقل 8 أحرف"
+
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+# Bulk Mark Attendance Feature
+msgid "Bulk Mark Attendance"
+msgstr "تسجيل الحضور بشكل جماعي"
+
+msgid "Mark All Students Attendance"
+msgstr "تسجيل حضور جميع الطلاب"
+
+msgid "Mark All Students"
+msgstr "علّم جميع الطلاب"
+
+msgid "Mark As"
+msgstr "علّم باسم"
+
+msgid "Select Date"
+msgstr "اختر التاريخ"
+
+msgid "Notes (Optional)"
+msgstr "ملاحظات (اختياري)"
+
+msgid "Add optional notes"
+msgstr "أضف ملاحظات اختيارية"
+
+msgid "Are you sure you want to mark all students?"
+msgstr "هل أنت متأكد من تسجيل حضور جميع الطلاب؟"
+
+msgid "How to Use"
+msgstr "كيفية الاستخدام"
+
+msgid "Step 1:"
+msgstr "الخطوة 1:"
+
+msgid "Select the date for attendance marking"
+msgstr "اختر التاريخ لتسجيل الحضور"
+
+msgid "Step 2:"
+msgstr "الخطوة 2:"
+
+msgid "Choose whether to mark all students as Present or Absent"
+msgstr "اختر ما إذا كنت تريد تسجيل جميع الطلاب حاضرين أو غائبين"
+
+msgid "Step 3:"
+msgstr "الخطوة 3:"
+
+msgid "Optionally add notes (e.g., 'Holiday', 'Special Event')"
+msgstr "اختياريًا أضف ملاحظات (على سبيل المثال، 'عطلة'، 'حدث خاص')"
+
+msgid "Step 4:"
+msgstr "الخطوة 4:"
+
+msgid "Click 'Mark All Students' to confirm"
+msgstr "انقر فوق 'علّم جميع الطلاب' للتأكيد"
+
+msgid "Select Status"
+msgstr "اختر الحالة"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Back to Home"
+msgstr "العودة إلى الرئيسية"
+msgid "Quick Links"
+msgstr "روابط سريعة"
+
+msgid "Home"
+msgstr "الصفحة الرئيسية"
+
+msgid "IMAM SHATTIBI CENTER is a comprehensive gamification platform for educational motivation."
+msgstr "مركز الإمام الشاطبي هي منصة ألعاب شاملة لتحفيز التعليم."
+
+msgid "Select Student"
+msgstr "اختر الطالب"
+
+msgid "First name"
+msgstr "الاسم الأول"
+
+msgid "Last name"
+msgstr "اسم العائلة"
+
+msgid "Enter email"
+msgstr "أدخل البريد الإلكتروني"
+
+msgid "Enter product name"
+msgstr "أدخل اسم المنتج"
+
+msgid "Product description"
+msgstr "وصف المنتج"
+
+msgid "Enter price in coins"
+msgstr "أدخل السعر بالعملات"
+
+msgid "Add any notes"
+msgstr "أضف أي ملاحظات"
+
+msgid "Why are you rewarding this student?"
+msgstr "لماذا تكافئ هذا الطالب؟"
+
+msgid "Enter number of coins"
+msgstr "أدخل عدد العملات"
+
+msgid "Member Level"
+msgstr "مستوى العضوية"
+
+msgid "Gold"
+msgstr "ذهبي"
+
+msgid "Silver"
+msgstr "فضي"
+
+msgid "Bronze"
+msgstr "برونزي"

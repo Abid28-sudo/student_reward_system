@@ -220,3 +220,133 @@ class PurchaseProductForm(forms.ModelForm):
         if quantity and quantity < 1:
             raise forms.ValidationError(_('Quantity must be at least 1'))
         return quantity
+
+
+class EditProfileForm(forms.ModelForm):
+    """Form for users to edit their profile information"""
+    first_name = forms.CharField(
+        max_length=150,
+        required=True,
+        label=_('First Name'),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('First name')
+        })
+    )
+    last_name = forms.CharField(
+        max_length=150,
+        required=True,
+        label=_('Last Name'),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Last name')
+        })
+    )
+    email = forms.EmailField(
+        required=True,
+        label=_('Email Address'),
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Enter email')
+        })
+    )
+    username = forms.CharField(
+        max_length=150,
+        required=True,
+        label=_('Username'),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Username')
+        })
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'username']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
+        
+        # Check if email already exists for another user
+        if CustomUser.objects.filter(email=email).exclude(username=username).exists():
+            raise forms.ValidationError(_('This email is already registered.'))
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        email = self.cleaned_data.get('email')
+        
+        # Check if username already exists for another user
+        if CustomUser.objects.filter(username=username).exclude(email=email).exists():
+            raise forms.ValidationError(_('This username is already taken.'))
+        return username
+
+
+class ChangePasswordForm(forms.Form):
+    """Form for users to change their password"""
+    current_password = forms.CharField(
+        label=_('Current Password'),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Enter current password')
+        })
+    )
+    new_password = forms.CharField(
+        label=_('New Password'),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Enter new password')
+        })
+    )
+    confirm_password = forms.CharField(
+        label=_('Confirm New Password'),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Confirm new password')
+        })
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def clean_current_password(self):
+        current_password = self.cleaned_data.get('current_password')
+        if not self.user.check_password(current_password):
+            raise forms.ValidationError(_('Current password is incorrect.'))
+        return current_password
+
+    def clean_confirm_password(self):
+        new_password = self.cleaned_data.get('new_password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        
+        if new_password and confirm_password and new_password != confirm_password:
+            raise forms.ValidationError(_('New passwords do not match.'))
+        return confirm_password
+
+
+class BulkMarkAttendanceForm(forms.Form):
+    """Form for teachers to mark all students attendance at once"""
+    date = forms.DateField(
+        label=_('Date'),
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date'
+        }),
+        initial=date.today()
+    )
+    status = forms.ChoiceField(
+        choices=AttendanceStatus.choices,
+        label=_('Mark All As'),
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'})
+    )
+    notes = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': _('Add any notes (optional)')
+        }),
+        label=_('Notes')
+    )
