@@ -118,11 +118,11 @@
                                         <td class="fw-bold">{% trans "Member Level" %}:</td>
                                         <td>
                                             {% if student_profile.total_coins >= 1000 %}
-                                                <span class="badge bg-gold">{% trans "Gold" %}</span>
+                                                <span class="badge bg-gold">🥇{% trans "Gold" %}</span>
                                             {% elif student_profile.total_coins >= 500 %}
-                                                <span class="badge bg-secondary">{% trans "Silver" %}</span>
+                                                <span class="badge bg-secondary">🥈{% trans "Silver" %}</span>
                                             {% else %}
-                                                <span class="badge bg-bronze">{% trans "Bronze" %}</span>
+                                                <span class="badge bg-bronze text-black">🥉{% trans "Bronze" %}</span>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -149,9 +149,6 @@
                                 </a>
                             {% endif %}
                         </div>
-                        <a href="{% url 'rewards_app:edit_profile' %}" class="btn btn-warning">
-                            <i class="bi bi-pencil-square"></i> {% trans "Edit Profile" %}
-                        </a>
                     </div>
                 </div>
             </div>

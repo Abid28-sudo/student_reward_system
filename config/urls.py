@@ -15,7 +15,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    path('admin/', admin.site.urls),
+    path('secure-admin-panel-2026/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include(('rewards_app.urls', 'rewards_app'), namespace='rewards_app')),
     prefix_default_language=False,

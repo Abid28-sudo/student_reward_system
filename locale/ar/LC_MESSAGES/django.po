@@ -473,6 +473,15 @@ msgstr "طُلب في"
 msgid "Actions"
 msgstr "الإجراءات"
 
+msgid "Leave fields blank to keep current information unchanged."
+msgstr "اترك الحقول فارغة للاحتفاظ بالمعلومات الحالية دون تغيير."
+
+msgid "Leave blank to keep current"
+msgstr "اترك فارغاً للاحتفاظ بالحالي"
+
+msgid "This is a shared store. All teachers can view, edit, and delete products."
+msgstr "هذا متجر مشترك. جميع المعلمين يمكنهم عرض وتعديل وحذف المنتجات."
+
 msgid "Approve"
 msgstr "الموافقة"
 
@@ -692,3 +701,6 @@ msgstr "فضي"
 
 msgid "Bronze"
 msgstr "برونزي"
+
+msgid "Leave fields blank to keep current information unchanged."
+msgstr "اترك الحقول فارغة للاحتفاظ بالمعلومات الحالية دون تغيير."

@@ -5,6 +5,11 @@
 
 {% block content %}
 <div class="container py-4">
+    <div class="alert alert-info" role="alert">
+        <i class="bi bi-info-circle"></i>
+        {% trans "This is a shared store. All teachers can view, edit, and delete products." %}
+    </div>
+    
     <div class="row mb-4">
         <div class="col">
             <h2>
@@ -61,7 +66,7 @@
                             </a>
                             <form method="post" action="{% url 'rewards_app:delete_product' product.pk %}" style="display:inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('{% trans "Delete this product?" %}')">
+                                <button type="submit" class="btn btn-sm btn-danger">
                                     <i class="fas fa-trash"></i> {% trans "Delete" %}
                                 </button>
                             </form>

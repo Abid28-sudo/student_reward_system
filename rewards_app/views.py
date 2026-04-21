@@ -24,8 +24,7 @@ from .models import (
 )
 from .forms import (
     CustomUserCreationForm, CustomAuthenticationForm, RewardStudentForm,
-    MarkAttendanceForm, AddProductForm, PurchaseProductForm, EditProfileForm,
-    ChangePasswordForm, BulkMarkAttendanceForm
+    MarkAttendanceForm, AddProductForm, PurchaseProductForm, BulkMarkAttendanceForm
 )
 
 
@@ -437,8 +436,8 @@ def mark_all_attendance(request):
 
 @teacher_required
 def manage_store(request):
-    """Manage store products"""
-    products = Product.objects.filter(created_by=request.user).order_by('-created_at')
+    """Manage store products - all teachers can see and edit all products (shared store)"""
+    products = Product.objects.all().order_by('-created_at')  # All products visible to all teachers
     paginator = Paginator(products, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -469,8 +468,8 @@ def add_product(request):
 
 @teacher_required
 def edit_product(request, product_id):
-    """Edit existing product"""
-    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
+    """Edit existing product - all teachers can edit any product in shared store"""
+    product = get_object_or_404(Product, pk=product_id)  # Allow all teachers to edit
     
     if request.method == 'POST':
         form = AddProductForm(request.POST, request.FILES, instance=product)
@@ -487,8 +486,8 @@ def edit_product(request, product_id):
 @teacher_required
 @require_POST
 def delete_product(request, product_id):
-    """Delete product"""
-    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
+    """Delete product - all teachers can delete any product in shared store"""
+    product = get_object_or_404(Product, pk=product_id)  # Allow all teachers to delete
     product.delete()
     messages.success(request, _('Product deleted successfully!'))
     return redirect('rewards_app:manage_store')
@@ -776,36 +775,4 @@ def profile(request):
     return render(request, 'rewards_app/profile.html', context)
 
 
-@login_required
-def edit_profile(request):
-    """Edit user profile information"""
-    if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=request.user)
-        password_form = ChangePasswordForm(request.user, request.POST)
-        
-        if 'edit_profile' in request.POST:
-            if form.is_valid():
-                form.save()
-                messages.success(request, _('Profile updated successfully!'))
-                return redirect('rewards_app:profile')
-        elif 'change_password' in request.POST:
-            if password_form.is_valid():
-                new_password = password_form.cleaned_data.get('new_password')
-                request.user.set_password(new_password)
-                request.user.save()
-                # Re-authenticate with new password
-                from django.contrib.auth import update_session_auth_hash
-                update_session_auth_hash(request, request.user)
-                messages.success(request, _('Password changed successfully!'))
-                return redirect('rewards_app:profile')
-    else:
-        form = EditProfileForm(instance=request.user)
-        password_form = ChangePasswordForm(request.user)
-    
-    context = {
-        'form': form,
-        'password_form': password_form,
-        'is_teacher': request.user.role == 'teacher',
-        'is_student': request.user.role == 'student',
-    }
-    return render(request, 'rewards_app/edit_profile.html', context)
+
