@@ -24,11 +24,8 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "bullfrog-gainfully-surging.ngrok-free.dev",
-]
+# Get allowed hosts from environment, split by comma. Default to local dev hosts.
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,bullfrog-gainfully-surging.ngrok-free.dev').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -83,17 +80,6 @@ DATABASES = {
     }
 }
 
-# For PostgreSQL (uncomment when ready):
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME', 'student_reward_db'),
-#         'USER': os.getenv('DB_USER', 'postgres'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST', 'localhost'),
-#         'PORT': os.getenv('DB_PORT', '5432'),
-#     }
-# }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -158,15 +144,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
-            'formatter': 'verbose',
+    'file': {
+        'class': 'logging.handlers.TimedRotatingFileHandler',
+        'filename': BASE_DIR / 'logs' / 'django.log',
+        'when': 'midnight',     
+        'interval': 1,         
+        'backupCount': 7,     
+        'formatter': 'verbose',
         },
     },
     'root': {
         'handlers': ['console', 'file'],
-        'level': 'INFO',
+        'level': 'WARNING' if not DEBUG else 'INFO',
     },
 }
 
@@ -174,11 +163,9 @@ LOGGING = {
 os.makedirs(BASE_DIR / 'logs', exist_ok=True)
 
 
-# Add this if using Bootstrap 5
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://bullfrog-gainfully-surging.ngrok-free.dev"
-]
+# Get trusted origins from environment. Required for Django 4.0+ when using HTTPS.
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://bullfrog-gainfully-surging.ngrok-free.dev').split(',')

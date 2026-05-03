@@ -41,6 +41,15 @@ class CustomUserCreationForm(UserCreationForm):
             'placeholder': _('Last name')
         })
     )
+    middle_name = forms.CharField(
+        max_length=150,
+        required=False,
+        label=_('Middle Name'),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Middle name (optional)')
+        })
+    )
     role = forms.ChoiceField(
         choices=CustomUser.ROLE_CHOICES,
         label=_('Role'),
@@ -49,7 +58,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name', 'role', 'password1', 'password2')
+        fields = ('username', 'email', 'first_name', 'middle_name', 'last_name', 'role', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -246,3 +255,17 @@ class BulkMarkAttendanceForm(forms.Form):
         }),
         label=_('Notes')
     )
+
+
+class StudentProfileForm(forms.ModelForm):
+    """Form for updating student profile information (hifdh level)"""
+    hifdh = forms.ChoiceField(
+        choices=StudentProfile._meta.get_field('hifdh').choices,
+        label=_('Quran Memorization (Hifdh) Level'),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        help_text=_('Select the student\'s Quran memorization level')
+    )
+
+    class Meta:
+        model = StudentProfile
+        fields = ['hifdh']

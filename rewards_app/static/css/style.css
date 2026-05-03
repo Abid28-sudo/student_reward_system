@@ -54,6 +54,38 @@ html[data-theme="standard"] {
     --bs-primary: #007bff;
 }
 
+/* Theme 2: Dark Mode */
+html[data-theme="dark"] {
+    --primary-color: #0d6efd;
+    --primary-light: #3b82f6;
+    --secondary-color: #9ca3af;
+
+    /* Background */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+
+    /* Text */
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5f5;
+    --text-light: #ffffff;
+
+    /* Borders */
+    --border-color: #334155;
+
+    /* Navbar */
+    --navbar-bg: #020617;
+    --navbar-text: #f1f5f9;
+
+    /* Bootstrap Overrides */
+    --bs-body-bg: #0f172a;
+    --bs-body-color: #f1f5f9;
+    --bs-primary: #0d6efd;
+
+    /* Gradient */
+    --gradient-primary: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -501,6 +533,10 @@ footer h5 {
         font-size: 1.5rem;
     }
     
+    .card-body a{
+        font-size: 0.875rem;
+    }
+
     .stat-box {
         margin-bottom: 1rem;
     }

@@ -23,7 +23,7 @@
                     <option value="">{% trans "All Students" %}</option>
                     {% for student in students %}
                         <option value="{{ student.id }}" {% if selected_student|stringformat:"s" == student.id|stringformat:"s" %}selected{% endif %}>
-                            {{ student.user.get_full_name }} ({{ student.collection_count }} {% trans "items" %})
+                            {{ student.user.get_full_name }}
                         </option>
                     {% endfor %}
                 </select>

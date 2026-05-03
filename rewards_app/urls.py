@@ -34,6 +34,7 @@ urlpatterns = [
     
     # Student URLs
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
+    path('student/update-hifdh/', views.update_hifdh, name='update_hifdh'),
     path('student/ranking/', views.student_ranking, name='student_ranking'),
     path('student/attendance/', views.view_attendance, name='view_attendance'),
     path('student/transactions/', views.transaction_history, name='transaction_history'),

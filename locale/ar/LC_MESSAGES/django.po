@@ -479,6 +479,39 @@ msgstr "اترك الحقول فارغة للاحتفاظ بالمعلومات �
 msgid "Leave blank to keep current"
 msgstr "اترك فارغاً للاحتفاظ بالحالي"
 
+msgid "Middle Name"
+msgstr "الاسم الأوسط"
+
+msgid "Middle name (optional)"
+msgstr "الاسم الأوسط (اختياري)"
+
+msgid "Quran Memorization (Hifdh) Level"
+msgstr "مستوى حفظ القرآن الكريم"
+
+msgid "Select the student's Quran memorization level"
+msgstr "اختر مستوى حفظ الطالب للقرآن الكريم"
+
+msgid "Not Memorizing"
+msgstr "لم يبدأ الحفظ"
+
+msgid "Juz 1-5"
+msgstr "الأجزاء 1-5"
+
+msgid "Juz 6-10"
+msgstr "الأجزاء 6-10"
+
+msgid "Juz 11-15 (Half Quran)"
+msgstr "الأجزاء 11-15 (نصف القرآن)"
+
+msgid "Juz 16-20"
+msgstr "الأجزاء 16-20"
+
+msgid "Juz 21-25"
+msgstr "الأجزاء 21-25"
+
+msgid "Juz 26-30 (Full Quran)"
+msgstr "الأجزاء 26-30 (القرآن كاملاً)"
+
 msgid "This is a shared store. All teachers can view, edit, and delete products."
 msgstr "هذا متجر مشترك. جميع المعلمين يمكنهم عرض وتعديل وحذف المنتجات."
 

@@ -38,9 +38,66 @@
                 <small class="text-muted">{% trans "Your attendance record" %}</small>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="dashboard-stat-card">
+                <h4><i class="fas fa-quran"></i> 
+                    {% if student.hifdh == 'none' %}
+                        {% trans "Not Started" %}
+                    {% elif student.hifdh == 'juz_26_30' %}
+                        ✨ {% trans "Complete" %}
+                    {% else %}
+                        {% trans "In Progress" %}
+                    {% endif %}
+                </h4>
+                <p>{% trans "Quran Memorization" %}</p>
+                <small class="text-muted">
+                    {% if student.hifdh == 'none' %}
+                        {% trans "Not Memorizing" %}
+                    {% elif student.hifdh == 'juz_1_5' %}
+                        {% trans "Juz 1-5" %}
+                    {% elif student.hifdh == 'juz_6_10' %}
+                        {% trans "Juz 6-10" %}
+                    {% elif student.hifdh == 'juz_11_15' %}
+                        {% trans "Juz 11-15 (Half Quran)" %}
+                    {% elif student.hifdh == 'juz_16_20' %}
+                        {% trans "Juz 16-20" %}
+                    {% elif student.hifdh == 'juz_21_25' %}
+                        {% trans "Juz 21-25" %}
+                    {% elif student.hifdh == 'juz_26_30' %}
+                        {% trans "Juz 26-30 (Full Quran)" %}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
     </div>
 
-    <!-- Quick Navigation -->
+    <!-- Hifdh Level Update Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-quran"></i> {% trans "Update Quran Memorization Level" %}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'rewards_app:update_hifdh' %}" class="row g-3">
+                        {% csrf_token %}
+                        <div class="col-md-8">
+                            {{ hifdh_form.hifdh }}
+                            {% if hifdh_form.hifdh.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ hifdh_form.hifdh.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-info w-100">
+                                <i class="fas fa-save"></i> {% trans "Update Level" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm">

@@ -47,7 +47,7 @@
                                 <select name="student_id" id="studentSelect" class="form-select" required>
                                     <option value="">-- {% trans "Choose a student" %} --</option>
                                     {% for student in students %}
-                                        <option value="{{ student.pk }}">{{ student.user.get_full_name }} ({{ student.user.username }})</option>
+                                        <option value="{{ student.pk }}">{{ student.user.get_full_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

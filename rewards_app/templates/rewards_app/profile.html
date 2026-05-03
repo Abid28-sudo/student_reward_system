@@ -27,6 +27,12 @@
                                         <td class="fw-bold">{% trans "Full Name" %}:</td>
                                         <td>{{ user.get_full_name|default:_("Not provided") }}</td>
                                     </tr>
+                                    {% if user.middle_name %}
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Middle Name" %}:</td>
+                                        <td>{{ user.middle_name }}</td>
+                                    </tr>
+                                    {% endif %}
                                     <tr>
                                         <td class="fw-bold">{% trans "Email" %}:</td>
                                         <td>{{ user.email }}</td>
@@ -97,6 +103,28 @@
                                     <tr>
                                         <td class="fw-bold">{% trans "Attendance" %}:</td>
                                         <td>{{ student_profile.attendance_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{% trans "Quran Memorization (Hifdh) Level" %}:</td>
+                                        <td>
+                                            <span class="badge bg-primary">
+                                                {% if student_profile.hifdh == 'none' %}
+                                                    {% trans "Not Memorizing" %}
+                                                {% elif student_profile.hifdh == 'juz_1_5' %}
+                                                    {% trans "Juz 1-5" %}
+                                                {% elif student_profile.hifdh == 'juz_6_10' %}
+                                                    {% trans "Juz 6-10" %}
+                                                {% elif student_profile.hifdh == 'juz_11_15' %}
+                                                    {% trans "Juz 11-15 (Half Quran)" %}
+                                                {% elif student_profile.hifdh == 'juz_16_20' %}
+                                                    {% trans "Juz 16-20" %}
+                                                {% elif student_profile.hifdh == 'juz_21_25' %}
+                                                    {% trans "Juz 21-25" %}
+                                                {% elif student_profile.hifdh == 'juz_26_30' %}
+                                                    {% trans "Juz 26-30 (Full Quran)" %}
+                                                {% endif %}
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

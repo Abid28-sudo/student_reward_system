@@ -43,12 +43,6 @@
                                 <a href="{% url 'rewards_app:student_detail' student.pk %}" class="btn btn-sm btn-info">
                                     <i class="fas fa-eye"></i> {% trans "View" %}
                                 </a>
-                                <form method="post" action="{% url 'rewards_app:delete_student' student.pk %}" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i> {% trans "Deactivate" %}
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                     {% endfor %}

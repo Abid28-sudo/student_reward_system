@@ -32,6 +32,11 @@ class CustomUser(AbstractUser):
         default='student',
         verbose_name=_('Role')
     )
+    middle_name = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name=_('Middle Name')
+    )
     is_teacher = models.BooleanField(
         default=False,
         verbose_name=_('Is Teacher')
@@ -98,6 +103,21 @@ class StudentProfile(models.Model):
         validators=[MinValueValidator(0)],
         verbose_name=_('Rank Position')
     )
+    hifdh = models.CharField(
+        max_length=50,
+        choices=[
+            ('none', _('Not Memorizing')),
+            ('juz_1_5', _('Juz 1-5')),
+            ('juz_6_10', _('Juz 6-10')),
+            ('juz_11_15', _('Juz 11-15 (Half Quran)')),
+            ('juz_16_20', _('Juz 16-20')),
+            ('juz_21_25', _('Juz 21-25')),
+            ('juz_26_30', _('Juz 26-30 (Full Quran)')),
+        ],
+        default='none',
+        verbose_name=_('Quran Memorization (Hifdh) Level'),
+        help_text=_('Select the student\'s Quran memorization level')
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_('Created At')
@@ -127,16 +147,16 @@ class StudentProfile(models.Model):
     def add_coins(self, amount, reason=''):
         """Add coins to student's balance"""
         if amount > 0:
-            self.total_coins += amount
-            self.save(update_fields=['total_coins', 'updated_at'])
+            StudentProfile.objects.filter(pk=self.pk).update(total_coins=models.F('total_coins') + amount, updated_at=datetime.now())
+            self.refresh_from_db()
             return True
         return False
 
     def spend_coins(self, amount):
         """Deduct coins from student's balance"""
         if amount > 0 and self.total_coins >= amount:
-            self.total_coins -= amount
-            self.save(update_fields=['total_coins', 'updated_at'])
+            StudentProfile.objects.filter(pk=self.pk).update(total_coins=models.F('total_coins') - amount, updated_at=datetime.now())
+            self.refresh_from_db()
             return True
         return False
 
@@ -352,9 +372,9 @@ class Product(models.Model):
 
     def decrease_quantity(self):
         """Decrease quantity when purchased"""
-        if self.quantity_available > 0:
-            self.quantity_available -= 1
-            self.save(update_fields=['quantity_available'])
+        if self.quantity_available != -1 and self.quantity_available > 0:
+            Product.objects.filter(pk=self.pk).update(quantity_available=models.F('quantity_available') - 1)
+            self.refresh_from_db()
 
 
 class Order(models.Model):
@@ -425,7 +445,6 @@ def create_student_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=StudentProfile)
 def update_all_ranks(sender, instance, **kwargs):
     """Update ranking for all students (simplified for MVP)"""
-    students = StudentProfile.objects.all().order_by('-total_coins', '-attendance_count')
-    for rank, student in enumerate(students, 1):
-        if student.rank != rank:
-            StudentProfile.objects.filter(pk=student.pk).update(rank=rank)
+    # Optimization: Only run this periodically or via a background task in production.
+    # For now, we disconnect the signal to prevent recursive loops and performance lag.
+    pass

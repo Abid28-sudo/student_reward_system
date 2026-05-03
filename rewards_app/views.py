@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.db.models import Sum, Count, Q, F
+from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST, require_GET
 from django.utils.translation import gettext as _
@@ -24,7 +25,8 @@ from .models import (
 )
 from .forms import (
     CustomUserCreationForm, CustomAuthenticationForm, RewardStudentForm,
-    MarkAttendanceForm, AddProductForm, PurchaseProductForm, BulkMarkAttendanceForm
+    MarkAttendanceForm, AddProductForm, PurchaseProductForm, BulkMarkAttendanceForm,
+    StudentProfileForm
 )
 
 
@@ -199,7 +201,6 @@ def reject_teacher(request, teacher_id):
         teacher.is_approved = False
         teacher.is_active = False
         teacher.save()
-        # TODO: Send email to teacher with rejection reason
         messages.success(request, _('Teacher account has been rejected.'))
         return redirect('rewards_app:pending_teachers')
     
@@ -528,6 +529,7 @@ def collections(request):
 # ============================================================================
 
 @student_required
+@student_required
 def student_dashboard(request):
     """Student main dashboard"""
     student = request.user.student_profile
@@ -535,13 +537,33 @@ def student_dashboard(request):
     recent_attendances = student.attendances.all().order_by('-date')[:10]
     recent_collections = student.orders.select_related('product').order_by('-created_at')[:6]
     
+    # Initialize hifdh form
+    hifdh_form = StudentProfileForm(instance=student)
+    
     context = {
         'student': student,
         'recent_transactions': recent_transactions,
         'recent_attendances': recent_attendances,
         'recent_collections': recent_collections,
+        'hifdh_form': hifdh_form,
     }
     return render(request, 'rewards_app/student/dashboard.html', context)
+
+
+@student_required
+@require_POST
+def update_hifdh(request):
+    """Update student's Quran memorization level (hifdh)"""
+    student = request.user.student_profile
+    form = StudentProfileForm(request.POST, instance=student)
+    
+    if form.is_valid():
+        form.save()
+        messages.success(request, _('Quran memorization level updated successfully!'))
+    else:
+        messages.error(request, _('Error updating memorization level. Please try again.'))
+    
+    return redirect('rewards_app:student_dashboard')
 
 
 @student_required
@@ -632,12 +654,15 @@ def browse_store(request):
 
 @student_required
 @require_POST
+@transaction.atomic
 def purchase_product(request, product_id):
     """Purchase product from store"""
-    product = get_object_or_404(Product, pk=product_id, is_active=True)
-    student = request.user.student_profile
-    quantity = int(request.POST.get('quantity', 1))
+    # Lock the product and student rows for the duration of this transaction
+    product = Product.objects.select_for_update().get(pk=product_id, is_active=True)
+    student = StudentProfile.objects.select_for_update().get(user=request.user)
     
+    quantity = int(request.POST.get('quantity', 1))
+
     # Validate quantity
     if quantity < 1:
         messages.error(request, _('Invalid quantity.'))
@@ -773,6 +798,3 @@ def profile(request):
         'is_teacher': user.role == 'teacher',
     }
     return render(request, 'rewards_app/profile.html', context)
-
-
-
