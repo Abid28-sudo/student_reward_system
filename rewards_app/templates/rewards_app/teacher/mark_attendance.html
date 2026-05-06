@@ -74,8 +74,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="notesInput" class="form-label">{% trans "Notes (Optional)" %}</label>
-                                <textarea name="notes" id="notesInput" class="form-control" rows="3" placeholder="{% trans 'Add any notes' %}"></textarea>
+                                <label for="notesInput" class="form-label">{% trans "Add Notes (Optional)" %}</label>
+                                <textarea name="notes" id="notesInput" class="form-control" rows="3"></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary">
@@ -140,14 +140,13 @@
                             
                             <div class="col-md-4 mb-3">
                                 <label for="bulkNotesInput" class="form-label">
-                                    {% trans "Notes (Optional)" %}
+                                    {% trans "Add Notes (Optional)" %}
                                 </label>
                                 <input 
                                     type="text" 
                                     name="notes" 
                                     id="bulkNotesInput"
                                     class="form-control"
-                                    placeholder="{% trans 'Add optional notes' %}"
                                 >
                             </div>
                         </div>
@@ -160,7 +159,7 @@
                         
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-between">
-                            <button type="submit" class="btn btn-success btn-lg">
+                            <button type="submit" class="btn btn-success btn-lg" onclick="return confirmAction();">
                                 <i class="bi bi-check-circle"></i>
                                 {% trans "Mark All Students" %}
                             </button>

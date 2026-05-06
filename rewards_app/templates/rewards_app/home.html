@@ -4,18 +4,18 @@
 {% block title %}{% trans "Home" %} - {% trans "IMAM SHATTIBI CENTER" %}{% endblock %}
 
 {% block content %}
-<div class="hero-section bg-gradient py-5 text-dark">
+<div class="hero-section bg-gradient py-5">
     <div class="container text-center">
         <h1 class="display-4 fw-bold mb-4">
-            <i class="fas fa-star"></i> {% trans "IMAM SHATTIBI CENTER" %}
+            <i class="fas fa-graduation-cap"></i> {% trans "IMAM SHATTIBI CENTER" %}
         </h1>
         <p class="lead mb-4">{% trans "Motivate and engage students through gamification, achievements, and friendly competition." %}</p>
         
         {% if not user.is_authenticated %}
-            <a href="{% url 'rewards_app:login' %}" class="btn btn-light btn-lg me-2">
+            <a href="{% url 'rewards_app:login' %}" class="btn btn-lg me-2">
                 <i class="fas fa-sign-in-alt"></i> {% trans "Login" %}
             </a>
-            <a href="{% url 'rewards_app:register' %}" class="btn btn-light btn-lg ms-2">
+            <a href="{% url 'rewards_app:register' %}" class="btn btn-lg ms-2">
                 <i class="fas fa-user-plus"></i> {% trans "Register" %}
             </a>
         {% else %}
@@ -78,7 +78,7 @@
 </section>
 
 <!-- Statistics Section -->
-<section class="py-5 bg-light">
+<section class="py-5">
     <div class="container">
         <h2 class="text-center mb-5">{% trans "Why Use Our System?" %}</h2>
         
@@ -87,28 +87,28 @@
                 <div class="stat-box">
                     <h3 class="text-primary">📊</h3>
                     <h5>{% trans "Gamification" %}</h5>
-                    <p class="text-muted">{% trans "Boost motivation through points and rankings" %}</p>
+                    <p class="text-secondary">{% trans "Boost motivation through points and rankings" %}</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-box">
                     <h3 class="text-success">🎯</h3>
                     <h5>{% trans "Easy Management" %}</h5>
-                    <p class="text-muted">{% trans "Simple interface for teachers and students" %}</p>
+                    <p class="text-secondary">{% trans "Simple interface for teachers and students" %}</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-box">
                     <h3 class="text-info">🌍</h3>
                     <h5>{% trans "Multilingual" %}</h5>
-                    <p class="text-muted">{% trans "Support for Arabic and English" %}</p>
+                    <p class="text-secondary">{% trans "Support for Arabic and English" %}</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-box">
                     <h3 class="text-warning">📱</h3>
                     <h5>{% trans "Responsive Design" %}</h5>
-                    <p class="text-muted">{% trans "Works on all devices and screen sizes" %}</p>
+                    <p class="text-secondary">{% trans "Works on all devices and screen sizes" %}</p>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
         <p class="lead mb-4">{% trans "Create your account now and start rewarding your students!" %}</p>
         
         {% if not user.is_authenticated %}
-            <a href="{% url 'rewards_app:register' %}" class="btn btn-light btn-lg">
+            <a href="{% url 'rewards_app:register' %}" class="btn btn-light btn-lg text-black">
                 {% trans "Create Account Now" %}
             </a>
         {% endif %}

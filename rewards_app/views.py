@@ -4,19 +4,16 @@ Handles all HTTP requests for login, dashboards, CRUD operations, etc.
 """
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from django.db.models import Sum, Count, Q, F
+from django.db.models import Count, Q
 from django.db import transaction
-from django.http import JsonResponse, HttpResponseForbidden
-from django.views.decorators.http import require_POST, require_GET
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
 from functools import wraps
-from datetime import timedelta
 from django.utils import timezone
 
 from .models import (
@@ -25,8 +22,7 @@ from .models import (
 )
 from .forms import (
     CustomUserCreationForm, CustomAuthenticationForm, RewardStudentForm,
-    MarkAttendanceForm, AddProductForm, PurchaseProductForm, BulkMarkAttendanceForm,
-    StudentProfileForm
+    AddProductForm, BulkMarkAttendanceForm, StudentProfileForm
 )
 
 
@@ -59,6 +55,19 @@ def student_required(view_func):
             messages.error(request, _('You do not have permission to access this page.'))
             if request.user.role == 'teacher':
                 return redirect('rewards_app:teacher_dashboard')
+            return redirect('rewards_app:home')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+def student_or_teacher_required(view_func):
+    """Decorator to allow access to both students and teachers"""
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('rewards_app:login')
+        if request.user.role not in ['student', 'teacher']:
+            messages.error(request, _('You do not have permission to access this page.'))
             return redirect('rewards_app:home')
         return view_func(request, *args, **kwargs)
     return wrapper
@@ -566,18 +575,26 @@ def update_hifdh(request):
     return redirect('rewards_app:student_dashboard')
 
 
-@student_required
+
+
+def is_student_or_teacher(user):
+    """Check if user is a student or teacher"""
+    return user.groups.filter(name__in=['Student', 'Teacher']).exists()
+
+@student_or_teacher_required
 def student_ranking(request):
-    """View leaderboard/ranking"""
+    """View leaderboard/ranking - accessible to both students and teachers"""
     # Get all students ranked by coins and attendance
     rankings = StudentProfile.objects.all().order_by('-total_coins', '-attendance_count')
     
-    # Find student's position
-    student = request.user.student_profile
-    student_rank = rankings.filter(
-        Q(total_coins__gt=student.total_coins) |
-        (Q(total_coins=student.total_coins) & Q(attendance_count__gt=student.attendance_count))
-    ).count() + 1
+    # Find current user's position (only for students)
+    student_rank = None
+    if request.user.role == 'student':
+        student = request.user.student_profile
+        student_rank = rankings.filter(
+            Q(total_coins__gt=student.total_coins) |
+            (Q(total_coins=student.total_coins) & Q(attendance_count__gt=student.attendance_count))
+        ).count() + 1
     
     paginator = Paginator(rankings, 20)
     page_number = request.GET.get('page')
@@ -726,6 +743,9 @@ def student_purchases(request):
     student = request.user.student_profile
     orders = student.orders.select_related('product').order_by('-created_at')
     
+    total_cost = sum(order.coins_spent for order in orders)
+    averge_cost = total_cost / len(orders) if orders else 0
+
     paginator = Paginator(orders, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -733,8 +753,11 @@ def student_purchases(request):
     context = {
         'page_obj': page_obj,
         'orders': page_obj.object_list,
+        'total_cost' : total_cost,
+        'averge_cost' : averge_cost
     }
-    return render(request, 'rewards_app/student/purchase_history.html', context)
+ 
+    return render(request, 'rewards_app/student/purchase_history.html', context,)
 
 
 # ============================================================================

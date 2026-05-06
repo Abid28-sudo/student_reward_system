@@ -1293,3 +1293,15 @@ The **Student Reward System** is a complete, production-ready web application th
 **Created**: April 2026  
 **Version**: 1.0 - Complete & Production Ready  
 **Status**: ✅ All Features Implemented
+
+/uplaod to hostinger/
+rewards_app/
+config/
+locale/
+static/
+templates/
+manage.py
+requirements.txt
+.env
+README.md
+.gitignore

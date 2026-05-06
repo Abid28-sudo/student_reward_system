@@ -55,6 +55,7 @@
                                     <li><a class="dropdown-item" href="{% url 'rewards_app:mark_attendance' %}">{% trans "Mark Attendance" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'rewards_app:manage_store' %}">{% trans "Store" %}</a></li>
                                     <li><a class="dropdown-item" href="{% url 'rewards_app:collections' %}">{% trans "Collections" %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'rewards_app:student_ranking' %}">{% trans "Student Ranking" %}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{% url 'rewards_app:pending_teachers' %}">
                                         <i class="fas fa-user-clock"></i> {% trans "Pending Teachers" %}
@@ -91,7 +92,7 @@
                                         <input type="hidden" name="language" value="en" />
                                         <input type="hidden" name="next" value="" id="nextUrl-en" />
                                         <button type="submit" class="dropdown-item " style="justify-content: flex-start;">
-                                            🇬🇧 English
+                                            {% trans "🇬🇧 English" %}
                                         </button>
                                     </form>
                                 </li>
@@ -101,7 +102,7 @@
                                         <input type="hidden" name="language" value="ar" />
                                         <input type="hidden" name="next" value="" id="nextUrl-ar" />
                                         <button type="submit" class="dropdown-item" style="justify-content: flex-start;">
-                                            🇸🇦 العربية
+                                            {% trans "🇸🇦 العربية" %}
                                         </button>
                                     </form>
                                 </li>
@@ -116,7 +117,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{% url 'rewards_app:profile' %}">{% trans "Profile" %}</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'rewards_app:logout' %}">{% trans "Logout" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'rewards_app:logout' %}" onclick="return confirmAction();">{% trans "Logout" %}</a></li>
                             </ul>
                         </li>
                         
@@ -136,35 +137,6 @@
                             <a class="nav-link" href="{% url 'rewards_app:register' %}">
                                 <i class="fas fa-user-plus"></i> {% trans "Register" %}
                             </a>
-                        </li>
-                        
-                        <!-- Language Switcher (Guest) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-globe"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <form method="post" action="{% url 'set_language' %}" class="dropdown-item p-0">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="language" value="en" />
-                                        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                                        <button type="submit" class="btn btn-link dropdown-item" style="justify-content: flex-start;">
-                                            🇬🇧 English
-                                        </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form method="post" action="{% url 'set_language' %}" class="dropdown-item p-0">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="language" value="ar" />
-                                        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                                        <button type="submit" class="btn btn-link dropdown-item" style="justify-content: flex-start;">
-                                            🇸🇦 العربية
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
                         </li>
                     {% endif %}
                 </ul>
@@ -201,20 +173,21 @@
                     <h5>{% trans "Quick Links" %}</h5>
                     <ul class="list-unstyled">
                         <li><a href="{% url 'rewards_app:home' %}" class="text-white-50 text-decoration-none">{% trans "Home" %}</a></li>
+                        <li>{% if user.is_authenticated %}<a href="{% url 'rewards_app:student_ranking' %}" class="text-white-50 text-decoration-none">{% trans "Ranking" %}</a>{% endif %}</li>
                         <li>{% if user.is_authenticated %}<a href="{% url 'rewards_app:profile' %}" class="text-white-50 text-decoration-none">{% trans "Profile" %}</a>{% else %}<a href="{% url 'rewards_app:login' %}" class="text-white-50 text-decoration-none">{% trans "Login" %}</a>{% endif %}</li>
-                        <li>{% if user.is_authenticated %}<a href="{% url 'rewards_app:manage_store' %}" class="text-white-50 text-decoration-none">{% trans "store" %}</a> {%elif user.role == 'student' %} <a href="{% url 'rewards_app:browse_store' %}" class="text-white-50 text-decoration-none">{% trans "store" %}</a>{% endif %}</li>
+                        <li>{% if user.is_authenticated and user.role == 'teacher' %}<a href="{% url 'rewards_app:manage_store' %}" class="text-white-50 text-decoration-none">{% trans "store" %}</a> {%elif user.role == 'student' %} <a href="{% url 'rewards_app:browse_store' %}" class="text-white-50 text-decoration-none">{% trans "store" %}</a>{% endif %}</li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>{% trans "Contact teachers" %}</h5>
                     <p class="text-white-50">
                         📧 {% trans "Email" %}: Allensilvar573@gmail.com<br>
-                        📞 {% trans "Phone" %}: (+234) 07040682500
+                        📞 {% trans "Phone" %}: (+234) 7040682500
                     </p>
                     <h5>{% trans "Contact developer" %}</h5>
                     <p class="text-white-50">
                         📧 {% trans "Email" %}: aabidadil28@gmail.com<br>
-                        📞 {% trans "Phone" %}: (+234) 07014977763
+                        📞 {% trans "Phone" %}: (+234) 7014977763
                     </p>
                 </div>
             </div>

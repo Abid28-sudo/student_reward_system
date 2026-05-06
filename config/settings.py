@@ -22,10 +22,10 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'False'
 
 # Get allowed hosts from environment, split by comma. Default to local dev hosts.
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,bullfrog-gainfully-surging.ngrok-free.dev').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','127.0.0.1,localhost').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -168,4 +168,4 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 # Get trusted origins from environment. Required for Django 4.0+ when using HTTPS.
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://bullfrog-gainfully-surging.ngrok-free.dev').split(',')
+# CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS',).split(',')

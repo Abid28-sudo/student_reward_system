@@ -16,7 +16,7 @@
                     <!-- User Information Section -->
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <h5 class="text-muted">{% trans "Basic Information" %}</h5>
+                            <h5 class="text-secondary">{% trans "Basic Information" %}</h5>
                             <table class="table table-borderless">
                                 <tbody>
                                     <tr>
@@ -52,7 +52,7 @@
                         </div>
                         
                         <div class="col-md-6">
-                            <h5 class="text-muted">{% trans "Account Details" %}</h5>
+                            <h5 class="text-secondary">{% trans "Account Details" %}</h5>
                             <table class="table table-borderless">
                                 <tbody>
                                     <tr>
@@ -83,7 +83,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
-                            <h5 class="text-muted">{% trans "Student Statistics" %}</h5>
+                            <h5 class="text-secondary">{% trans "Student Statistics" %}</h5>
                             <table class="table table-borderless">
                                 <tbody>
                                     <tr>
@@ -131,7 +131,7 @@
                         </div>
                         
                         <div class="col-md-6">
-                            <h5 class="text-muted">{% trans "Quick Stats" %}</h5>
+                            <h5 class="text-secondary">{% trans "Quick Stats" %}</h5>
                             <table class="table table-borderless">
                                 <tbody>
                                     <tr>
@@ -142,18 +142,6 @@
                                         <td class="fw-bold">{% trans "Total Purchases" %}:</td>
                                         <td>{{ student_profile.orders.count }}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="fw-bold">{% trans "Member Level" %}:</td>
-                                        <td>
-                                            {% if student_profile.total_coins >= 1000 %}
-                                                <span class="badge bg-gold">🥇{% trans "Gold" %}</span>
-                                            {% elif student_profile.total_coins >= 500 %}
-                                                <span class="badge bg-secondary">🥈{% trans "Silver" %}</span>
-                                            {% else %}
-                                                <span class="badge bg-bronze text-black">🥉{% trans "Bronze" %}</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -161,7 +149,7 @@
                     {% endif %}
                 </div>
 
-                <div class="card-footer bg-light">
+                <div class="card-footer">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-between">
                         <div class="btn-group" role="group">
                             <a href="{% url 'rewards_app:home' %}" class="btn btn-secondary">

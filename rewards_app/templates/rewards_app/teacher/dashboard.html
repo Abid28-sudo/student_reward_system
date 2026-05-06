@@ -50,7 +50,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">{% trans "Quick Actions" %}</h5>
-                    <div class="btn-group" role="group">
+                    <div class="btn-group flex-wrap" role="group">
                         <a href="{% url 'rewards_app:add_student' %}" class="btn btn-primary">
                             <i class="fas fa-user-plus"></i> {% trans "Add Student" %}
                         </a>
@@ -62,6 +62,9 @@
                         </a>
                         <a href="{% url 'rewards_app:add_product' %}" class="btn btn-warning">
                             <i class="fas fa-plus"></i> {% trans "Add Product" %}
+                        </a>
+                        <a href="{% url 'rewards_app:student_ranking' %}" class="btn btn-secondary">
+                            <i class="fas fa-chart-line"></i> {% trans "View Leaderboard" %}
                         </a>
                     </div>
                 </div>
