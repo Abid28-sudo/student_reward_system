@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv('DEBUG', 'False') == 'False'
 
 # Get allowed hosts from environment, split by comma. Default to local dev hosts.
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'imam-shattibi-center.up.railway.app,127.0.0.1,localhost').split(',')
 
 # Application definition
 INSTALLED_APPS = [
