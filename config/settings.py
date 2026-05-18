@@ -165,4 +165,4 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 # Get trusted origins from environment. Required for Django 4.0+ when using HTTPS.
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS',).split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS','').split(',')
