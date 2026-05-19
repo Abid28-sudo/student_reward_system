@@ -12,3 +12,4 @@ psycopg2-binary==2.9.12
 python-dotenv==1.2.2
 sqlparse==0.5.3
 tzdata==2025.2
+dj_database_url==3.1.2

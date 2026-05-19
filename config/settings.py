@@ -5,6 +5,8 @@ Django settings for Student Reward System project.
 import os
 from pathlib import Path
 
+import dj_database_url
+
 # Load environment variables from .env file
 try:
     from dotenv import load_dotenv
@@ -25,7 +27,7 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv('DEBUG', 'False') == 'False'
 
 # Get allowed hosts from environment, split by comma. Default to local dev hosts.
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'https://imam-shattibi-center.onrender.com,imam-shattibi-center.up.railway.app,127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'https://imam-shattibi-center.up.railway.app,127.0.0.1,localhost').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -74,10 +76,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database Configuration
 # Using SQLite for MVP, can switch to PostgreSQL
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default' : dj_database_url.config(default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
 }
 
 
@@ -165,4 +164,4 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 # Get trusted origins from environment. Required for Django 4.0+ when using HTTPS.
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS','https://imam-shattibi-center.onrender.com,https://imam-shattibi-center.up.railway.app').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS','https://imam-shattibi-center.up.railway.app').split(',')
