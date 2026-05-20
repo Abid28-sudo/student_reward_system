@@ -1281,7 +1281,6 @@ The **Student Reward System** is a complete, production-ready web application th
 **Key Achievements**:
 - ✨ 100% feature complete
 - 🌍 Bilingual support (English + Arabic)
-- 🎨 3 beautiful themes
 - 🔐 Production-ready security
 - 📱 Fully responsive design
 - ✅ Tested and validated
