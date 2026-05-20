@@ -1,1 +1,1 @@
-web : gunicorn student_reward_system.wsgi
+web: python create_superuser.py && gunicorn yourproject.wsgi
