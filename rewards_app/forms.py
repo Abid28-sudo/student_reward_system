@@ -102,10 +102,11 @@ class RewardStudentForm(forms.ModelForm):
     )
     reason = forms.CharField(
         max_length=500,
+        required=False,
         widget=forms.Textarea(attrs={
             'class': 'form-control',
             'rows': 4,
-            'placeholder': _('Why are you rewarding this student?')
+            'placeholder': _('Why are you rewarding this student? (Optional)')
         }),
         label=_('Reason for Reward')
     )
@@ -118,6 +119,33 @@ class RewardStudentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Set transaction type to reward
         self.fields['coins'].label = _('Number of Coins')
+
+
+class AwardCupForm(forms.Form):
+    """Form for teachers to award cups to students"""
+    student = forms.ModelChoiceField(
+        queryset=StudentProfile.objects.select_related('user'),
+        label=_('Select Student'),
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    cups = forms.IntegerField(
+        min_value=1,
+        label=_('Number of Cups'),
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Enter number of cups')
+        })
+    )
+    reason = forms.CharField(
+        max_length=500,
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': _(' reason for this cup award  (Optional)')
+        }),
+        label=_('Reason')
+    )
 
 
 class MarkAttendanceForm(forms.ModelForm):

@@ -15,14 +15,14 @@ from .models import (
 @admin.register(CustomUser)
 class CustomUserAdmin(BaseUserAdmin):
     """Admin interface for CustomUser"""
-    list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'status', 'is_approved', 'is_active', 'created_at')
-    list_filter = ('role', 'status', 'is_approved', 'is_active', 'created_at')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'is_active', 'created_at')
+    list_filter = ('role', 'is_active', 'created_at')
     search_fields = ('username', 'email', 'first_name', 'last_name', 'middle_name')
     ordering = ('-created_at',)
     
     fieldsets = BaseUserAdmin.fieldsets + (
         (_('User Information'), {
-            'fields': ('middle_name', 'role', 'is_teacher', 'status', 'is_approved', 'created_at', 'updated_at')
+            'fields': ('middle_name', 'role', 'is_teacher', 'created_at', 'updated_at')
         }),
     )
     
@@ -32,15 +32,15 @@ class CustomUserAdmin(BaseUserAdmin):
 @admin.register(StudentProfile)
 class StudentProfileAdmin(admin.ModelAdmin):
     """Admin interface for StudentProfile"""
-    list_display = ('get_student_name', 'total_coins', 'attendance_count', 'rank', 'hifdh', 'updated_at')
-    list_filter = ('rank', 'total_coins', 'attendance_count', 'hifdh', 'created_at')
+    list_display = ('get_student_name', 'total_coins', 'cups', 'attendance_count', 'rank', 'hifdh', 'updated_at')
+    list_filter = ('rank', 'total_coins', 'cups', 'attendance_count', 'hifdh', 'created_at')
     search_fields = ('user__username', 'user__first_name', 'user__last_name', 'user__email')
     ordering = ('-total_coins', '-attendance_count')
     readonly_fields = ('rank', 'created_at', 'updated_at', 'total_coins', 'attendance_count')
     
     fieldsets = (
         (_('Student Information'), {
-            'fields': ('user', 'total_coins', 'attendance_count', 'rank')
+            'fields': ('user', 'total_coins', 'cups', 'attendance_count', 'rank')
         }),
         (_('Academic Progress'), {
             'fields': ('hifdh',)

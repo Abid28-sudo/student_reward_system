@@ -9,97 +9,126 @@
         <i class="fas fa-trophy"></i> {% trans "Student Ranking" %}
     </h2>
 
+    <div class="d-flex justify-content-end mb-3">
+        <div class="btn-group btn-group-sm shadow-sm" role="group" aria-label="{% trans 'Sort leaderboard' %}">
+            <a href="?sort=coins"
+                class="btn {% if current_sort == 'coins' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                <i class="fas fa-coins"></i> {% trans "Coins" %}
+            </a>
+            <a href="?sort=attendance"
+                class="btn {% if current_sort == 'attendance' %}btn-success{% else %}btn-outline-success{% endif %}">
+                <i class="fas fa-calendar-check"></i> {% trans "Attendance" %}
+            </a>
+            <a href="?sort=cups"
+                class="btn {% if current_sort == 'cups' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                <i class="fas fa-trophy"></i> {% trans "Cups" %}
+            </a>
+        </div>
+    </div>
+
     {% if rankings %}
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>{% trans "Rank" %}</th>
-                                <th>{% trans "Student Name" %}</th>
-                                <th>
-                                    <i class="fas fa-coins text-warning"></i> {% trans "Coins" %}
-                                </th>
-                                <th>
-                                    <i class="fas fa-calendar-check text-success"></i> {% trans "Attendance" %}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ranking in rankings %}
-                                <tr {% if ranking.user.username == request.user.username %}class="table-info" style="font-weight: bold;"{% endif %}>
-                                    <td>
-                                        {% if ranking.rank == 1 %}
-                                            <span class="badge bg-warning text-dark"><i class="fas fa-crown"></i> 1</span>
-                                        {% elif ranking.rank == 2 %}
-                                            <span class="badge bg-secondary"><i class="fas fa-medal"></i> 2</span>
-                                        {% elif ranking.rank == 3 %}
-                                            <span class="badge" style="background-color: #CD7F32;"><i class="fas fa-medal"></i> 3</span>
-                                        {% else %}
-                                            <span class="badge bg-light text-dark">{{ ranking.rank }}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {{ ranking.user.get_full_name }}
-                                        {% if ranking.user.username == request.user.username %}
-                                            <span class="badge bg-info">{% trans "YOU" %}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td><span class="badge bg-warning">{{ ranking.total_coins }}</span></td>
-                                    <td><span class="badge bg-success">{{ ranking.attendance_count }}</span></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="col-md-4 pt-5">
-                    <div class="card">
-                        <div class="card-body text-center">
-                        <h5 class="card-title">{% trans "Your Position" %}</h5>
-                        <h2 class="text-primary mb-3">
-                            <i class="fas fa-position-relative"></i> #{{ student_rank }}
-                        </h2>
-                        </p>
-                    </div>
-                </div>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>{% trans "Rank" %}</th>
+                            <th>{% trans "Student Name" %}</th>
+                            <th>
+                                <i class="fas fa-coins text-warning"></i> {% trans "Coins" %}
+                            </th>
+                            <th>
+                                <i class="fas fa-calendar-check text-success"></i> {% trans "Attendance" %}
+                            </th>
+                            <th>
+                                <i class="fas fa-trophy text-warning"></i> {% trans "Cups" %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ranking in rankings %}
+                      <tr {% if ranking.user.username == request.user.username %} class="table-info" style="font-weight: bold;" {% endif %}>
+                            <td>
+                                {% if ranking.rank == 1 %}
+                                <span class="badge bg-warning text-dark"><i class="fas fa-crown"></i> 1</span>
+                                {% elif ranking.rank == 2 %}
+                                <span class="badge bg-secondary"><i class="fas fa-medal"></i> 2</span>
+                                {% elif ranking.rank == 3 %}
+                                <span class="badge" style="background-color: #CD7F32;"><i class="fas fa-medal"></i>
+                                    3</span>
+                                {% else %}
+                                <span class="badge bg-light text-dark">{{ ranking.rank }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ ranking.user.get_full_name }}
+                                {% if ranking.user.username == request.user.username %}
+                                <span class="badge bg-info">{% trans "YOU" %}</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="badge bg-warning">{{ ranking.total_coins }}</span></td>
+                            <td><span class="badge bg-success">{{ ranking.attendance_count }}</span></td>
+                            <td><span class="badge bg-warning text-dark">{{ ranking.cups }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Pagination -->
-        {% if page_obj.has_other_pages %}
-            <nav>
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=1">{% trans "First" %}</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
-                        </li>
+        <div class="col-md-4 pt-5">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{% trans "Your Position" %}</h5>
+                    {% if student_rank is not None %}
+                    <h2 class="text-primary mb-3">
+                        <i class="fas fa-medal"></i> #{{ student_rank }}
+                    </h2>
+                    {% else %}
+                    <p class="text-muted mb-0">{% trans "Position is shown for students only." %}</p>
                     {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <li class="page-item disabled">
-                        <span class="page-link">{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}</span>
-                    </li>
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?sort={{ current_sort }}&page=1">{% trans "First" %}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?sort={{ current_sort }}&page={{ page_obj.previous_page_number }}">{% trans
+                    "Previous" %}</a>
+            </li>
+            {% endif %}
 
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{% trans "Last" %}</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+            <li class="page-item disabled">
+                <span class="page-link">{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{
+                    page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?sort={{ current_sort }}&page={{ page_obj.next_page_number }}">{% trans
+                    "Next" %}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?sort={{ current_sort }}&page={{ page_obj.paginator.num_pages }}">{% trans
+                    "Last" %}</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
     {% else %}
-        <div class="alert alert-info">
-            {% trans "No ranking data available yet." %}
-        </div>
+    <div class="alert alert-info">
+        {% trans "No ranking data available yet." %}
+    </div>
     {% endif %}
 </div>
 {% endblock %}

@@ -57,6 +57,7 @@ class StudentProfileModelTest(TestCase):
     def test_profile_initial_values(self):
         """Test initial profile values"""
         self.assertEqual(self.profile.total_coins, 0)
+        self.assertEqual(self.profile.cups, 0)
         self.assertEqual(self.profile.attendance_count, 0)
     
     def test_add_coins(self):
@@ -64,6 +65,12 @@ class StudentProfileModelTest(TestCase):
         result = self.profile.add_coins(50)
         self.assertTrue(result)
         self.assertEqual(self.profile.total_coins, 50)
+
+    def test_add_cups(self):
+        """Test adding cups"""
+        result = self.profile.add_cups(3)
+        self.assertTrue(result)
+        self.assertEqual(self.profile.cups, 3)
     
     def test_spend_coins(self):
         """Test spending coins"""
@@ -110,6 +117,19 @@ class TransactionModelTest(TestCase):
         )
         self.assertEqual(transaction.coins, 50)
         self.assertEqual(transaction.transaction_type, TransactionType.REWARD)
+
+    def test_reward_transaction_updates_student_total_coins_for_one_coin(self):
+        """A 1-coin reward should be reflected immediately in the student's balance."""
+        Transaction.objects.create(
+            student=self.student.student_profile,
+            coins=1,
+            transaction_type=TransactionType.REWARD,
+            reason='Small reward',
+            created_by=self.teacher
+        )
+
+        self.student.student_profile.refresh_from_db()
+        self.assertEqual(self.student.student_profile.total_coins, 1)
 
 
 class AttendanceModelTest(TestCase):

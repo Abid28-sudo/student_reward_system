@@ -22,7 +22,7 @@ from .models import (
 )
 from .forms import (
     CustomUserCreationForm, CustomAuthenticationForm, RewardStudentForm,
-    AddProductForm, BulkMarkAttendanceForm, StudentProfileForm
+    AwardCupForm, AddProductForm, BulkMarkAttendanceForm, StudentProfileForm
 )
 
 
@@ -323,6 +323,51 @@ def reward_student(request):
 
 
 @teacher_required
+def award_cup(request):
+    """Award cups to a student"""
+    if request.method == 'POST':
+        form = AwardCupForm(request.POST)
+        if form.is_valid():
+            student = form.cleaned_data['student']
+            cups = form.cleaned_data['cups']
+            reason = form.cleaned_data.get('reason', '').strip()
+
+            student.add_cups(cups)
+
+            if reason:
+                messages.success(
+                    request,
+                    _('Awarded %(cups)d cup(s) to %(student)s. Reason: %(reason)s') % {
+                        'cups': cups,
+                        'student': student.user.get_full_name(),
+                        'reason': reason,
+                    }
+                )
+            else:
+                messages.success(
+                    request,
+                    _('Awarded %(cups)d cup(s) to %(student)s.') % {
+                        'cups': cups,
+                        'student': student.user.get_full_name(),
+                    }
+                )
+            return redirect('rewards_app:award_cup')
+    else:
+        form = AwardCupForm()
+
+    return render(request, 'rewards_app/teacher/award_cup.html', {'form': form})
+
+
+@teacher_required
+@require_POST
+def reset_cups(request):
+    """Reset all student cup counts to zero"""
+    StudentProfile.objects.all().update(cups=0)
+    messages.success(request, _('All student cups have been reset to 0.'))
+    return redirect('rewards_app:teacher_dashboard')
+
+
+@teacher_required
 def mark_attendance(request):
     """Mark student attendance - individual or bulk"""
     if request.method == 'POST':
@@ -359,7 +404,7 @@ def mark_attendance(request):
                     count += 1
                 
                 messages.success(request, _('Attendance marked for %(count)d students!') % {'count': count})
-                return redirect('rewards_app:manage_students')
+                return redirect('rewards_app:mark_attendance')
         else:
             # Handle individual student attendance marking
             student_id = request.POST.get('student_id')
@@ -386,7 +431,7 @@ def mark_attendance(request):
             student.update_rank()
             
             messages.success(request, _('Attendance marked successfully!'))
-            return redirect('rewards_app:manage_students')
+            return redirect('rewards_app:mark_attendance')
     
     # GET request - display form with both individual and bulk options
     students = StudentProfile.objects.select_related('user').all()
@@ -584,27 +629,46 @@ def is_student_or_teacher(user):
 @student_or_teacher_required
 def student_ranking(request):
     """View leaderboard/ranking - accessible to both students and teachers"""
-    # Get all students ranked by coins and attendance
-    rankings = StudentProfile.objects.all().order_by('-total_coins', '-attendance_count')
-    
+    sort_by = request.GET.get('sort', 'coins')
+    sort_options = {
+        'coins': ('-total_coins', '-attendance_count', '-cups'),
+        'attendance': ('-attendance_count', '-total_coins', '-cups'),
+        'cups': ('-cups', '-total_coins', '-attendance_count'),
+    }
+    ordering = sort_options.get(sort_by, sort_options['coins'])
+
+    rankings = list(
+        StudentProfile.objects.select_related('user').order_by(*ordering)
+    )
+    for rank, student in enumerate(rankings, start=1):
+        student.rank = rank
+
     # Find current user's position (only for students)
     student_rank = None
     if request.user.role == 'student':
         student = request.user.student_profile
-        student_rank = rankings.filter(
-            Q(total_coins__gt=student.total_coins) |
-            (Q(total_coins=student.total_coins) & Q(attendance_count__gt=student.attendance_count))
-        ).count() + 1
-    
+        student_rank = 1 + sum(
+            1 for ranked_student in rankings
+            if (
+                (sort_by == 'coins' and ranked_student.total_coins > student.total_coins) or
+                (sort_by == 'attendance' and ranked_student.attendance_count > student.attendance_count) or
+                (sort_by == 'cups' and ranked_student.cups > student.cups) or
+                (sort_by == 'coins' and ranked_student.total_coins == student.total_coins and ranked_student.attendance_count > student.attendance_count) or
+                (sort_by == 'attendance' and ranked_student.attendance_count == student.attendance_count and ranked_student.total_coins > student.total_coins) or
+                (sort_by == 'cups' and ranked_student.cups == student.cups and ranked_student.total_coins > student.total_coins)
+            )
+        )
+
     paginator = Paginator(rankings, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
         'page_obj': page_obj,
         'rankings': page_obj.object_list,
         'student_rank': student_rank,
         'all_rankings': rankings,
+        'current_sort': sort_by,
     }
     return render(request, 'rewards_app/student/ranking.html', context)
 

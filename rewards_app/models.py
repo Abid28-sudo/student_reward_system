@@ -7,7 +7,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
-from django.db.models import Sum , Q
+from django.db.models import Sum, Q
+from django.db.models.functions import Coalesce
 from datetime import datetime
 
 class CustomUser(AbstractUser):
@@ -93,6 +94,11 @@ class StudentProfile(models.Model):
         validators=[MinValueValidator(0)],
         verbose_name=_('Total Coins')
     )
+    cups = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name=_('Cups')
+    )
     attendance_count = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
@@ -148,6 +154,14 @@ class StudentProfile(models.Model):
         """Add coins to student's balance"""
         if amount > 0:
             StudentProfile.objects.filter(pk=self.pk).update(total_coins=models.F('total_coins') + amount, updated_at=datetime.now())
+            self.refresh_from_db()
+            return True
+        return False
+
+    def add_cups(self, amount):
+        """Add cups to student's total"""
+        if amount > 0:
+            StudentProfile.objects.filter(pk=self.pk).update(cups=models.F('cups') + amount, updated_at=datetime.now())
             self.refresh_from_db()
             return True
         return False
@@ -223,13 +237,20 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         """Override save to update student profile"""
         super().save(*args, **kwargs)
-        # Update student's total coins
-        total = Transaction.objects.filter(
-            student=self.student
-        ).aggregate(
-            total=Sum('coins', filter=Q(transaction_type__in=['reward', 'adjustment']))
-            - Sum('coins', filter=Q(transaction_type='spend'))
+        # Update student's total coins using coalesced sums so even a single reward is counted.
+        reward_sum = Coalesce(
+            Sum('coins', filter=Q(transaction_type__in=['reward', 'adjustment'])),
+            0,
+        )
+        spend_sum = Coalesce(
+            Sum('coins', filter=Q(transaction_type='spend')),
+            0,
+        )
+
+        total = Transaction.objects.filter(student=self.student).aggregate(
+            total=reward_sum - spend_sum
         )['total'] or 0
+
         self.student.total_coins = total
         self.student.save(update_fields=['total_coins'])
 
