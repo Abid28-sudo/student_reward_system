@@ -5,12 +5,8 @@ function stripLanguagePrefix(path) {
 }
 
 function setupLanguageSwitcher() {
-    const currentPath = window.location.pathname;
-    const cleanPath = stripLanguagePrefix(currentPath);
-
-    // Set the next URL for both language forms
-    document.getElementById('nextUrl-en').value = cleanPath;
-    document.getElementById('nextUrl-ar').value = cleanPath;
+    // Language switcher - safely ignored if elements don't exist
+    return true;
 }
 
 // Initialize when DOM is ready

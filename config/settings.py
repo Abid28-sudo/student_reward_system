@@ -26,6 +26,10 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'False'
 
+# Disable SSL redirect for local development (debug mode)
+SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True' if not DEBUG else 'False').lower() in ('true', '1', 'yes', 'on')
+
+
 # Get allowed hosts from environment, split by comma. Default to local dev hosts.
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'https://imam-shattibi-center.up.railway.app,127.0.0.1,localhost,https://imamshattibi-center.com').split(',')
 

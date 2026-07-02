@@ -170,8 +170,7 @@
                         <div class="mb-2 pb-2 border-bottom">
                             <strong>{{ transaction.student.user.get_full_name }}</strong><br>
                             <small class="text-muted">
-                                +{{ transaction.coins }} {% trans "coins" %} • {{
-                                transaction.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                                +{{ transaction.coins }} {% trans "coins" %} 
                             </small>
                         </div>
                         {% endfor %}

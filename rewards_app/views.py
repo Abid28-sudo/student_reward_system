@@ -293,29 +293,38 @@ def reward_student(request):
         if form.is_valid():
             student = form.cleaned_data['student']
             coins = form.cleaned_data['coins']
-            reason = form.cleaned_data['reason']
-            
+            reason = form.cleaned_data.get('reason', '').strip()
+
             # Create transaction
-            transaction = Transaction.objects.create(
+            Transaction.objects.create(
                 student=student,
                 coins=coins,
                 transaction_type=TransactionType.REWARD,
-                reason=reason,
+                reason=reason or 'Reward',
                 created_by=request.user
             )
-            
-            # Update student coins
-            student.add_coins(coins)
+
+            student.refresh_from_db()
             student.update_rank()
-            
-            messages.success(
-                request,
-                _('Rewarded %(student)s with %(coins)d coins!') % {
-                    'student': student.user.get_full_name(),
-                    'coins': coins
-                }
-            )
-            return redirect('rewards_app:teacher_dashboard')
+
+            if reason:
+                messages.success(
+                    request,
+                    _('Rewarded %(student)s with %(coins)d coin(s). Reason: %(reason)s') % {
+                        'coins': coins,
+                        'student': student.user.get_full_name(),
+                        'reason': reason,
+                    }
+                )
+            else:
+                messages.success(
+                    request,
+                    _('Rewarded %(student)s with %(coins)d coin(s).') % {
+                        'coins': coins,
+                        'student': student.user.get_full_name(),
+                    }
+                )
+            return redirect('rewards_app:reward_student')
     else:
         form = RewardStudentForm()
     

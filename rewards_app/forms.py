@@ -85,7 +85,7 @@ class CustomAuthenticationForm(AuthenticationForm):
     )
 
 
-class RewardStudentForm(forms.ModelForm):
+class RewardStudentForm(forms.Form):
     """Form for teachers to reward students with coins"""
     student = forms.ModelChoiceField(
         queryset=StudentProfile.objects.select_related('user'),
@@ -105,20 +105,11 @@ class RewardStudentForm(forms.ModelForm):
         required=False,
         widget=forms.Textarea(attrs={
             'class': 'form-control',
-            'rows': 4,
-            'placeholder': _('Why are you rewarding this student? (Optional)')
+            'rows': 3,
+            'placeholder': _('Reason for reward (Optional)')
         }),
-        label=_('Reason for Reward')
+        label=_('Reason')
     )
-
-    class Meta:
-        model = Transaction
-        fields = ['coins', 'reason']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Set transaction type to reward
-        self.fields['coins'].label = _('Number of Coins')
 
 
 class AwardCupForm(forms.Form):
