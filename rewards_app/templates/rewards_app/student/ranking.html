@@ -114,11 +114,11 @@
 
             {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?sort={{ current_sort }}&page={{ page_obj.next_page_number }}">{% trans
+                <a class="page-link" href="?sort={{ current_sort }}">{% trans
                     "Next" %}</a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="?sort={{ current_sort }}&page={{ page_obj.paginator.num_pages }}">{% trans
+                <a class="page-link" href="?sort={{ current_sort }}">{% trans
                     "Last" %}</a>
             </li>
             {% endif %}
